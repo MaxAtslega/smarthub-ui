@@ -16,7 +16,7 @@ function App() {
           <img src={logoElectron} className='logo electron' alt='Electron + Vite logo' />
         </a>
       </div>
-      <h1>Electron + Vite + React</h1>
+      <h1>Hello World!</h1>
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -26,7 +26,7 @@ function App() {
         </p>
       </div>
       <p className='read-the-docs'>
-        Click on the Electron + Vite logo to learn more
+        test
       </p>
       <div className='flex-center'>
         Place static files into the<code>/public</code> folder <img style={{ width: '5em' }} src='./node.svg' alt='Node logo' />
