@@ -1,7 +1,6 @@
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-import { update } from './update'
 
 // The built directory structure
 //
@@ -13,6 +12,7 @@ import { update } from './update'
 // ├─┬ dist
 // │ └── index.html    > Electron-Renderer
 //
+
 process.env.DIST_ELECTRON = join(__dirname, '../')
 process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
 process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
@@ -43,30 +43,44 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
-    icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    title: 'SmartHub',
+    fullscreen: url == null,
+    kiosk: url == null,
+    height: 480 + 30,
+    width: 800 + 5,
     webPreferences: {
       preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
       contextIsolation: false,
     },
+    resizable: false
   })
 
   if (url) { // electron-vite-vue#298
     win.loadURL(url)
-    // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
   } else {
     win.loadFile(indexHtml)
   }
+
+  win.setBackgroundColor("#000000")
+  win.setMenu(null)
+
+  win.webContents.on('before-input-event', (_, input) => {
+    if (input.key === 'F12' && win !== null) {
+      !win.webContents.isDevToolsOpened() ? win.webContents.openDevTools({mode: 'right'}) : win.webContents.closeDevTools();
+    }
+  });
 
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
   })
+
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.key === "Escape") {
+      event.preventDefault();
+    }
+  });
 
   // Make all links open with the browser, not with the application
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -74,8 +88,7 @@ async function createWindow() {
     return { action: 'deny' }
   })
 
-  // Apply electron-updater
-  update(win)
+
 }
 
 app.whenReady().then(createWindow)
