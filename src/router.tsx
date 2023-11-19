@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, redirect} from "react-router-dom";
 
 import Dashboard from "@/routes/dashboard/Dashboard";
 import Calendar from "@/routes/calendar/Calendar";
@@ -9,13 +9,18 @@ import Notifications from "@/routes/notifications/Notifications";
 import Setup from "@/routes/setup/Setup";
 import Layout from "@/components/Layout";
 import DeviceControl from "@/routes/deviceControl/DeviceControl";
+import React from "react";
 
 export default createBrowserRouter([
+    {
+      path: "/",
+      loader: () => redirect("app/dashboard")
+    },
     {
         element: <Layout/>,
         children: [
             {
-                path: "/",
+                path: "app/dashboard",
                 element: <Dashboard/>,
             },
             {
@@ -37,6 +42,28 @@ export default createBrowserRouter([
             {
                 path: "system/settings",
                 element: <Settings/>,
+                children: [
+                    {
+                        path: "general",
+                        element: <Settings/>,
+                    },
+                    {
+                        path: "bluetooth",
+                        element: <Settings/>,
+                    },
+                    {
+                        path: "wlan",
+                        element: <Settings/>,
+                    },
+                    {
+                        path: "accounts",
+                        element: <Settings/>,
+                    },
+                    {
+                        path: "apps",
+                        element: <Settings/>,
+                    }
+                ]
             },
             {
                 path: "system/notifications",
