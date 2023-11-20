@@ -7,5 +7,6 @@ function Settings() {
 }
 
 //Header muss 34 Pixel sein
+//In English pls
 
 export default Settings
