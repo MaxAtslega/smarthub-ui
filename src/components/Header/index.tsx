@@ -13,7 +13,7 @@ const Header = () => {
     })
 
     return (
-        <div className={"h-[34px] w-full mb-1.5 mt-1.5 px-3"}>
+        <div className={"h-[34px] w-full mb-1.5 px-3"}>
             <div className={"flex justify-between"}>
                 <span className={"flex font-bold text-xs content-center flex-wrap"}>{date.toLocaleTimeString()}</span>
                 <div className={"h-full flex align-middle"}>

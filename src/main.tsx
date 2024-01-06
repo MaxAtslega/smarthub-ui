@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './samples/node-api'
 import './index.css'
-import {RouterProvider} from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import router from "@/router";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -10,5 +9,3 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <RouterProvider router={router} />
   </React.StrictMode>,
 )
-
-postMessage({ payload: 'removeLoading' }, '*')
