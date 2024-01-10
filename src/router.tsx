@@ -10,11 +10,26 @@ import Setup from "@/routes/setup/Setup";
 import Layout from "@/components/Layout";
 import DeviceControl from "@/routes/deviceControl/DeviceControl";
 import React from "react";
+import General from "@/routes/settings/General";
+import Bluetooth from "@/routes/settings/Bluetooth";
+import Wifi from "@/routes/settings/Wifi";
+import Actions from "@/routes/settings/Actions";
+import Accounts from "@/routes/settings/Accounts";
+import Clock from "@/routes/clock/Clock";
+import Login from "@/routes/login/Login";
 
 export default createBrowserRouter([
     {
-      path: "/",
-      loader: () => redirect("app/dashboard")
+        path: "*",
+        loader: () => redirect("/login")
+    },
+    {
+        path: "/",
+        loader: () => redirect("/login"),
+    },
+    {
+        path: "/login",
+        element: <Login />,
     },
     {
         element: <Layout/>,
@@ -40,29 +55,41 @@ export default createBrowserRouter([
                 element: <Weather/>,
             },
             {
-                path: "system/settings",
+                path: "app/clock",
+                element: <Clock/>,
+            },
+            {
+                path: "system/settings/",
                 element: <Settings/>,
                 children: [
                     {
                         path: "general",
-                        element: <Settings/>,
+                        element: <General/>,
                     },
                     {
                         path: "bluetooth",
-                        element: <Settings/>,
+                        element: <Bluetooth/>,
                     },
                     {
-                        path: "wlan",
-                        element: <Settings/>,
+                        path: "wifi",
+                        element: <Wifi/>,
+                    },
+                    {
+                        path: "actions",
+                        element: <Actions/>,
                     },
                     {
                         path: "accounts",
-                        element: <Settings/>,
+                        element: <Accounts/>,
                     },
                     {
-                        path: "apps",
-                        element: <Settings/>,
-                    }
+                        path: "customize",
+                        element: <Accounts/>,
+                    },
+                    {
+                        path: "",
+                        loader: () => redirect("/system/settings/general"),
+                    },
                 ]
             },
             {

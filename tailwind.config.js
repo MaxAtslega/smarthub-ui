@@ -15,7 +15,8 @@ export default {
       colors: {
         background: {
           default: '#000000',
-          secondary: '#111315'
+          secondary: '#111315',
+          third: "#15181b"
         },
         primary: {
           100: '#0746eb',
