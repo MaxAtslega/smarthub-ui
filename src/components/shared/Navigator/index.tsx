@@ -157,7 +157,7 @@ const WifiItem = () => {
 
     const onLongPress = () => {
         setWifi(true)
-        navigate("/system/settings/wifi")
+        navigate("/system/settings/network")
     };
 
     const onClick = () => {

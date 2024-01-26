@@ -14,14 +14,16 @@ function Settings() {
         <div className={"flex items-stretch justify-start"}>
           <div className={"pr-3"}>
             <NavigatorItem to={"/system/settings/general"}><FaCogs/></NavigatorItem>
-            <NavigatorItem to={"/system/settings/wifi"}><BsWifi/></NavigatorItem>
+            <NavigatorItem to={"/system/settings/network"}><BsWifi/></NavigatorItem>
             <NavigatorItem to={"/system/settings/bluetooth"}><IoMdBluetooth/></NavigatorItem>
             <NavigatorItem to={"/system/settings/actions"}><RiRfidFill/></NavigatorItem>
             <NavigatorItem to={"/system/settings/customize"}><BiSolidCustomize/></NavigatorItem>
             <NavigatorItem to={"/system/settings/accounts"}><LuUsers/></NavigatorItem>
           </div>
-          <div className={"bg-background-secondary w-[100%] p-3 rounded"}>
-            <Outlet />
+          <div className={"bg-background-secondary fixed top-[42px] left-[74px] w-[714px] h-[360px] p-3 rounded"}>
+            <div className={"h-[100%] overflow-auto"}>
+              <Outlet />
+            </div>
           </div>
         </div>
     )

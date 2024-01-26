@@ -3,6 +3,7 @@ import { webSocketService } from '@/services/webSocketService';
 import { addUser, removeUser, updateUser, selectUser } from '@/slices/userSlice';
 import User from "@/models/User";
 import {clearRFIDData, detectRFID} from "@/slices/rfidSlice";
+import {setInterfaces} from "@/slices/networkSlice";
 
 export const listenToWebSocket = createAsyncThunk('webSocket/listenToWebSocket', async (_, { dispatch }) => {
   webSocketService.addEventListener('message', (message: {data: any}) => {
@@ -24,6 +25,10 @@ function handleWebSocketMessage(message: any, dispatch: any) {
       setTimeout(() => {
         dispatch(clearRFIDData());
       }, 5000);
+      break;
+    case 'NETWORK_INTERFACES':
+      const interfaces: any[] = message.d;
+      dispatch(setInterfaces(interfaces))
       break;
     // Handle other message types
     default:

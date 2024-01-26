@@ -12,11 +12,11 @@ import DeviceControl from "@/routes/deviceControl/DeviceControl";
 import React from "react";
 import General from "@/routes/settings/General";
 import Bluetooth from "@/routes/settings/Bluetooth";
-import Wifi from "@/routes/settings/Wifi";
 import Actions from "@/routes/settings/Actions";
 import Accounts from "@/routes/settings/Accounts";
 import Clock from "@/routes/clock/Clock";
 import Login from "@/routes/login/Login";
+import Network from "@/routes/settings/Network";
 
 export default createBrowserRouter([
     {
@@ -71,8 +71,8 @@ export default createBrowserRouter([
                         element: <Bluetooth/>,
                     },
                     {
-                        path: "wifi",
-                        element: <Wifi/>,
+                        path: "network",
+                        element: <Network/>,
                     },
                     {
                         path: "actions",

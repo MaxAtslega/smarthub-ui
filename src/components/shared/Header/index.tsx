@@ -21,7 +21,7 @@ const Header = () => {
     return (
         <div className={"h-[38px] w-full px-3 mb-1 pt-1"}>
             <div className={"flex justify-between items-center h-[100%]"}>
-                <span className={"flex font-bold text-xs content-center flex-wrap"}>{date.getHours()}:{date.getMinutes() }</span>
+                <span className={"flex font-bold text-xs content-center flex-wrap"}>{date.getHours()}:{date.getMinutes()}</span>
                 <div className={"h-full flex align-middle"}>
                     <Link to={"/system/notifications"} className={`${location.pathname.includes("system/notifications")
                       ? "text-primary-200" : "text-white"}`}><MdNotifications className={"flex h-[38px] mr-3"} style={{"fontSize": "20px"}} /></Link>
