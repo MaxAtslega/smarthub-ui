@@ -6,11 +6,7 @@ class WebSocketService {
   }
 
   private initSocket() {
-    if (process.env.NODE_ENV == "development") {
-      this.socket = new WebSocket('ws://192.168.178.167:6814');
-    } else {
-      this.socket = new WebSocket('ws://localhost:6814');
-    }
+    this.socket = new WebSocket('ws://localhost:6814');
 
     this.socket.addEventListener('open', (event) => {
       console.log('WebSocket connected');

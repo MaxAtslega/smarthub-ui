@@ -108,8 +108,8 @@ const VolumeControlItem = () =>  {
           </div>
           {volumePopupOpen ?
             <div className={"absolute bottom-[80px] h-[200px] w-[50px] bg-background-third rounded"}>
-                <span className={"absolute top-1 left-[16px]"}>+</span>
-                <input className="-rotate-90 absolute top-14 -right-[45px] bottom-12 w-[136px]" type="range" step="1"
+                <span className={"absolute top-1 left-[18px]"}>+</span>
+                <input className="-rotate-90 absolute top-24 -right-[45px] bottom-14 w-[136px]" type="range" step="1"
                        value={volume} min="0" max="100" onChange={(event) => setVolume(parseInt(event.target.value))}/>
                 <span className={"absolute bottom-1 left-[21px]"}>-</span>
             </div> : null}
