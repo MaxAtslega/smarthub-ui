@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {getInterfacesData} from "@/slices/networkSlice";
+import {getInterfacesData} from "@/slices/network.slice";
 
 function Network() {
   const interfaces = useSelector(getInterfacesData);

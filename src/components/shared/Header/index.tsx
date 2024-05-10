@@ -6,7 +6,7 @@ import {
 import ProfilePicture from "@/assets/profile.jpg"
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {selectCurrentUser, selectUser} from "@/slices/userSlice";
+import {selectCurrentUser, selectUser} from "@/slices/user.slice";
 import {store} from "@/store";
 
 const Header = () => {

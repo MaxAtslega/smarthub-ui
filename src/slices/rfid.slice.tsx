@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import UserAction from "@/models/UserAction";
 
 interface RFIDState {
-  rfidData: number[] | null;
+  rfidData: UserAction | null;
 }
 
 const initialState: RFIDState = {
@@ -12,7 +13,7 @@ const rfidSlice = createSlice({
   name: 'rfid',
   initialState,
   reducers: {
-    detectRFID: (state, action: PayloadAction<number[]>) => {
+    detectRFID: (state, action: PayloadAction<UserAction>) => {
       state.rfidData = action.payload;
     },
     clearRFIDData: (state) => {

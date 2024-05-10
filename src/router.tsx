@@ -17,6 +17,7 @@ import Accounts from "@/routes/settings/Accounts";
 import Clock from "@/routes/clock/Clock";
 import Login from "@/routes/login/Login";
 import Network from "@/routes/settings/Network";
+import CreateProfile from "@/routes/profile/CreateProfile";
 
 export default createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export default createBrowserRouter([
     {
         path: "/login",
         element: <Login />,
+    },
+    {
+        path: "/create-profile",
+        element: <CreateProfile />,
     },
     {
         element: <Layout/>,

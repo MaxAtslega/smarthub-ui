@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { webSocketService } from '@/services/webSocketService';
-import { addUser, removeUser, updateUser, selectUser } from '@/slices/userSlice';
-import User from "@/models/User";
-import {clearRFIDData, detectRFID} from "@/slices/rfidSlice";
-import {setInterfaces} from "@/slices/networkSlice";
+import {clearRFIDData, detectRFID} from "@/slices/rfid.slice";
+import {setInterfaces} from "@/slices/network.slice";
+import {setDisplayStatus} from "@/slices/display.slice";
+import NetworkInterface from "@/models/NetworkInterface";
 
 export const listenToWebSocket = createAsyncThunk('webSocket/listenToWebSocket', async (_, { dispatch }) => {
   webSocketService.addEventListener('message', (message: {data: any}) => {
@@ -12,13 +12,10 @@ export const listenToWebSocket = createAsyncThunk('webSocket/listenToWebSocket',
 });
 
 function handleWebSocketMessage(message: any, dispatch: any) {
-  // Handle different message types and dispatch appropriate user actions
+  //   // Handle different message types and dispatch appropriate user actions
   switch (message.t) {
-    case 'USERS':
-      const users: User[] = message.d;
-      users.forEach(user => {
-        dispatch(addUser(user));
-      })
+    case 'DISPLAY_STATUS':
+      dispatch(setDisplayStatus(message.d.status == "on"))
       break;
     case 'RFID_DETECT':
       dispatch(detectRFID(message.d))
@@ -27,7 +24,7 @@ function handleWebSocketMessage(message: any, dispatch: any) {
       }, 5000);
       break;
     case 'NETWORK_INTERFACES':
-      const interfaces: any[] = message.d;
+      const interfaces: NetworkInterface[] = message.d;
       dispatch(setInterfaces(interfaces))
       break;
     // Handle other message types

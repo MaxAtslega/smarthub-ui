@@ -16,7 +16,11 @@ export default {
         background: {
           default: '#000000',
           secondary: '#111315',
-          third: "#15181b"
+          third: "#15181b",
+        },
+        special: {
+          red: "rgba(254, 76, 108, 1)",
+          redColor: "rgba(48, 48, 48, 1)",
         },
         primary: {
           100: '#0746eb',

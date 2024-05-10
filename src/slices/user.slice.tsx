@@ -1,16 +1,14 @@
-
-// Your existing slice and reducer code
 import {createSlice} from "@reduxjs/toolkit";
 import User from "@/models/User";
 
 interface UserState {
   users: User[];
-  user: User | null;
+  currentUser: User | null;
 }
 
 const initialState: UserState = {
   users: [],
-  user: null,
+  currentUser: null,
 };
 
 const userSlice = createSlice({
@@ -30,7 +28,7 @@ const userSlice = createSlice({
       }
     },
     selectUser: (state, action) => {
-      state.user = action.payload;
+      state.currentUser = action.payload;
     },
   },
 });
@@ -39,5 +37,5 @@ const userSlice = createSlice({
 export const { addUser, removeUser, updateUser, selectUser } = userSlice.actions;
 
 export const selectAllUsers = (state: { user: UserState }) => state.user.users;
-export const selectCurrentUser = (state: { user: UserState }) => state.user.user;
+export const selectCurrentUser = (state: { user: UserState }) => state.user.currentUser;
 export default userSlice.reducer;

@@ -13,13 +13,15 @@
   line-height: 1.5;
   font-weight: 400;
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
 
   width: 800px;
   min-height: 480px;
   max-height: 480px;
 
   overflow-x: hidden;
+
+  -moz-user-select: none;
+  user-select: none;
 }
 
 #root {
@@ -75,4 +77,34 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.no-pointer-events {
+  pointer-events: none;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  background: #111315;
+  border: none;
+}
+
+input:hover {
+  border: none;
+}
+
+input:focus {
+  border: none;
+  outline: none;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+button:focus {
+  border: none;
+  outline: none;
 }

@@ -1,3 +1,5 @@
+import {API_BASE_URL} from "@/constants/constants";
+
 class WebSocketService {
   private socket: WebSocket | null = null;
 
@@ -6,7 +8,7 @@ class WebSocketService {
   }
 
   private initSocket() {
-    this.socket = new WebSocket('ws://localhost:6814');
+    this.socket = new WebSocket(`ws://${API_BASE_URL}/ws`);
 
     this.socket.addEventListener('open', (event) => {
       console.log('WebSocket connected');

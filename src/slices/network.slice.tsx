@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import NetworkInterface from "@/models/NetworkInterface";
 
 interface RFIDState {
-  interfaces: any[];
+  interfaces: NetworkInterface[];
 }
 
 const initialState: RFIDState = {
@@ -12,7 +13,7 @@ const networkSlice = createSlice({
   name: 'network',
   initialState,
   reducers: {
-    setInterfaces: (state, action: PayloadAction<number[]>) => {
+    setInterfaces: (state, action: PayloadAction<NetworkInterface[]>) => {
       state.interfaces = action.payload;
     },
     clearInterfaces: (state) => {

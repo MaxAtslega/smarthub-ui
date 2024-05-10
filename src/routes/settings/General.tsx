@@ -1,26 +1,24 @@
 import {webSocketService} from "@/services/webSocketService";
+import {useRebootMutation, useShutdownMutation} from "@/api/system.api";
 
 function General() {
-  return (
-    <div>
-      <h1>General</h1>
+    const [shutdownSystem] = useShutdownMutation();
+    const [rebootSystem] = useRebootMutation();
 
-      <button className={"mt-4 mr-4"} onClick={() => {
-        webSocketService.sendMessage(JSON.stringify({
-          t: "REBOOT",
-          op: 0
-        }))
-      }}>REBOOT
-      </button>
-      <button className={"mt-4 mr-4"} onClick={() => {
-        webSocketService.sendMessage(JSON.stringify({
-          t: "SHUTDOWN",
-          op: 0
-        }))
-      }}>SHUTDOWN
-      </button>
-    </div>
-  )
+    return (
+        <div>
+            <h1>General</h1>
+
+            <button className={"mt-4 mr-4"} onClick={async () => {
+                await rebootSystem().unwrap();
+            }}>REBOOT</button>
+
+            <button className={"mt-4 mr-4"} onClick={async () => {
+                await shutdownSystem().unwrap();
+            }}>SHUTDOWN
+            </button>
+        </div>
+    )
 }
 
 export default General

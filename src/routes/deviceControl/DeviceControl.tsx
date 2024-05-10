@@ -17,7 +17,7 @@ function DeviceControl() {
 function controlLED(color: String) {
   webSocketService.sendMessage(JSON.stringify({
     t: "FLASH_LED",
-    op: 0,
+    op: 1,
     d: {
       "color": color
     }
