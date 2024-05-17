@@ -1,5 +1,6 @@
 import {webSocketService} from "@/services/webSocketService";
 import {useRebootMutation, useShutdownMutation} from "@/api/system.api";
+import React from "react";
 
 function General() {
     const [shutdownSystem] = useShutdownMutation();
@@ -11,7 +12,8 @@ function General() {
 
             <button className={"mt-4 mr-4"} onClick={async () => {
                 await rebootSystem().unwrap();
-            }}>REBOOT</button>
+            }}>REBOOT
+            </button>
 
             <button className={"mt-4 mr-4"} onClick={async () => {
                 await shutdownSystem().unwrap();

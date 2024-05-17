@@ -1,18 +1,10 @@
-import User from "@/models/User";
-import {IoMdAdd} from "react-icons/io";
 import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {selectCurrentUser} from "@/slices/user.slice";
-import {useNavigate} from "react-router-dom";
-import DatePicker from 'react-datepicker';
-import './react-datepicker.css';
-import Input from "@/components/Input";
+import {useNavigate, useRoutes} from "react-router-dom";
 import {useCreateUserMutation} from "@/api/users.api";
 
 function CreateProfile() {
     const [createUser, {isLoading, error}] = useCreateUserMutation();
     const [date, setDate] = useState(new Date());
-    const [startDate, setStartDate] = useState(new Date());
     const [nameInput, setNameInput] = useState("");
     const [birthdayInput, setBirthdayInput] = useState("");
     const navigate = useNavigate();
@@ -30,7 +22,9 @@ function CreateProfile() {
                 language: "en",
             }
         }).then((response) => {
-
+            if ('data' in response) {
+                navigate("/login")
+            }
         });
 
     }
@@ -62,30 +56,6 @@ function CreateProfile() {
 
                 <label className="form-label" htmlFor={"name"}>Name</label>
                 <input id={"name"}
-                       onChange={(e) => setNameInput(e.target.value)}
-                       className={"mb-4 w-full px-4 py-3 mt-2"} value={nameInput}
-                       type={"text"} placeholder={"Your name"}/>
-
-                <label className="form-label" htmlFor={"name2"}>Name</label>
-                <input id={"name2"}
-                       onChange={(e) => setNameInput(e.target.value)}
-                       className={"mb-4 w-full px-4 py-3 mt-2"} value={nameInput}
-                       type={"text"} placeholder={"Your name"}/>
-
-                <label className="form-label" htmlFor={"name3"}>Name</label>
-                <input id={"name3"}
-                       onChange={(e) => setNameInput(e.target.value)}
-                       className={"mb-4 w-full px-4 py-3 mt-2"} value={nameInput}
-                       type={"text"} placeholder={"Your name"}/>
-
-                <label className="form-label" htmlFor={"name4"}>Name</label>
-                <input id={"name4"}
-                       onChange={(e) => setNameInput(e.target.value)}
-                       className={"mb-4 w-full px-4 py-3 mt-2"} value={nameInput}
-                       type={"text"} placeholder={"Your name"}/>
-
-                <label className="form-label" htmlFor={"name5"}>Name</label>
-                <input id={"name5"}
                        onChange={(e) => setNameInput(e.target.value)}
                        className={"mb-4 w-full px-4 py-3 mt-2"} value={nameInput}
                        type={"text"} placeholder={"Your name"}/>

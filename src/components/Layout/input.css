@@ -7,7 +7,11 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    width: 100%
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 10px;
+    background-color: #111315;
 }
 
 .hg-theme-default .hg-button span {
@@ -54,14 +58,13 @@
     box-sizing: border-box;
     cursor: pointer;
     display: flex;
-    height: 59px;
     justify-content: center;
     padding: 5px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 }
 
 .hg-theme-default .hg-button.hg-standardBtn {
-    width: 20px
+    width: 10px
 }
 
 .hg-theme-default .hg-button.hg-activeButton {
