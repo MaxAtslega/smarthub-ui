@@ -15,6 +15,7 @@ const networkSlice = createSlice({
   reducers: {
     setInterfaces: (state, action: PayloadAction<NetworkInterface[]>) => {
       state.interfaces = action.payload;
+      console.log(state.interfaces)
     },
     clearInterfaces: (state) => {
       state.interfaces = [];

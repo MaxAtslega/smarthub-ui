@@ -10,8 +10,9 @@ function CreateProfile() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setInterval(() => setDate(new Date()), 1000*20)
-    })
+        const intervalId = setInterval(() => setDate(new Date()), 1000 * 20);
+        return () => clearInterval(intervalId);
+    }, []);
 
     const createProfile = async () => {
         const response = await createUser({

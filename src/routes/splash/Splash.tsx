@@ -49,8 +49,9 @@ function Splash() {
     });
 
     useEffect(() => {
-        setInterval(() => setDate(new Date()), 1000*20)
-    })
+        const intervalId = setInterval(() => setDate(new Date()), 1000 * 20);
+        return () => clearInterval(intervalId);
+    }, []);
 
     const [imageUrl, setImageUrl] = useState('');
 
