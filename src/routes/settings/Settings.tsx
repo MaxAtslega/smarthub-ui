@@ -11,8 +11,8 @@ import {LuUsers} from "react-icons/lu";
 
 function Settings() {
     return (
-        <div className={"flex items-stretch justify-start"}>
-          <div className={"pr-3"}>
+        <div className={"flex items-stretch justify-between h-auto"}>
+          <div className={"pr-3 absolute"}>
             <NavigatorItem to={"/system/settings/general"}><FaCogs/></NavigatorItem>
             <NavigatorItem to={"/system/settings/network"}><BsWifi/></NavigatorItem>
             <NavigatorItem to={"/system/settings/bluetooth"}><IoMdBluetooth/></NavigatorItem>
@@ -20,9 +20,11 @@ function Settings() {
             <NavigatorItem to={"/system/settings/customize"}><BiSolidCustomize/></NavigatorItem>
             <NavigatorItem to={"/system/settings/accounts"}><LuUsers/></NavigatorItem>
           </div>
-          <div className={"bg-background-secondary fixed top-[42px] left-[74px] w-[714px] h-[360px] p-3 rounded"}>
-            <div className={"h-[100%] overflow-auto"}>
-              <Outlet />
+          <div className={"ml-[62px] h-full bg-background-secondary w-full rounded"}>
+            <div className={""}>
+                <div className={"p-3 h-full"}>
+                    <Outlet />
+                </div>
             </div>
           </div>
         </div>

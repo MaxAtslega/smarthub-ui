@@ -19,7 +19,7 @@ import {webSocketService} from "@/services/webSocketService";
 
 const Navigator = () => {
     return (
-        <nav className={"h-[74px] p-3 w-max"}>
+        <nav className={"h-[74px] fixed bottom-0  p-3 w-max bg-background-default"}>
             <div className={"flex items-stretch"}>
                 <NavigatorItem to={"/app/dashboard"}><MdDashboard/></NavigatorItem>
                 <NavigatorItem to={"/app/calendar"}><MdCalendarMonth/></NavigatorItem>

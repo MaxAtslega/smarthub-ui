@@ -18,6 +18,7 @@ import Clock from "@/routes/clock/Clock";
 import Login from "@/routes/login/Login";
 import Network from "@/routes/settings/Network";
 import CreateProfile from "@/routes/profile/CreateProfile";
+import Splash from "@/routes/splash/Splash";
 
 export default createBrowserRouter([
     {
@@ -31,7 +32,11 @@ export default createBrowserRouter([
     {
         path: "/login",
         element: <Login />,
+    },{
+        path: "/splash",
+        element: <Splash />,
     },
+
     {
         path: "/create-profile",
         element: <CreateProfile />,

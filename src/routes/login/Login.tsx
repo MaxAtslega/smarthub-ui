@@ -17,8 +17,10 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setInterval(() => setDate(new Date()), 1000*20)
-  })
+    const intervalId = setInterval(() => setDate(new Date()), 1000 * 20);
+    return () => clearInterval(intervalId);
+  }, []);
+
   if (currentUser != null) {
     return <Navigate replace to="/app/dashboard" />
   }

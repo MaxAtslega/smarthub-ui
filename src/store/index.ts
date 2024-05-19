@@ -5,9 +5,11 @@ import networkSlice from "@/slices/network.slice";
 import displaySlice from "@/slices/display.slice";
 import { commonApi } from './common.api';
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
+import {weatherApi} from "@/api/weather.api";
 
 const rootReducer = combineReducers({
   [commonApi.reducerPath]: commonApi.reducer,
+  [weatherApi.reducerPath]: weatherApi.reducer,
   user: userSlice,
   rfid: rfidSlice,
   network: networkSlice,
@@ -19,7 +21,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(commonApi.middleware),
+    }).concat(commonApi.middleware).concat(weatherApi.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 })
 
