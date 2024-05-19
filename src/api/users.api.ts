@@ -15,6 +15,7 @@ export const usersApi = commonApi.injectEndpoints({
                 method: 'POST',
                 body: user,
             }),
+            invalidatesTags: [{ type: 'User', id: 'List' }],
         }),
         updateUser: builder.mutation<User, { user: User }>({
             query: ({ user }) => ({
@@ -22,14 +23,14 @@ export const usersApi = commonApi.injectEndpoints({
                 method: 'PUT',
                 body: user,
             }),
-            invalidatesTags: ['User'],
+            invalidatesTags: [{ type: 'User', id: 'List' }],
         }),
         deleteUser: builder.mutation<User, { user: User }>({
             query: ({ user }) => ({
                 url: `/example/${user.id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['User'],
+            invalidatesTags: [{ type: 'User', id: 'List' }],
         }),
     }),
 });

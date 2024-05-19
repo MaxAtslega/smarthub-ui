@@ -4,6 +4,7 @@ import {clearRFIDData, detectRFID} from "@/slices/rfid.slice";
 import {setInterfaces} from "@/slices/network.slice";
 import {setDisplayStatus} from "@/slices/display.slice";
 import NetworkInterface from "@/models/NetworkInterface";
+import {useNavigate} from "react-router-dom";
 
 export const listenToWebSocket = createAsyncThunk('webSocket/listenToWebSocket', async (_, { dispatch }) => {
   webSocketService.addEventListener('message', (message: {data: any}) => {
@@ -15,7 +16,10 @@ function handleWebSocketMessage(message: any, dispatch: any) {
   //   // Handle different message types and dispatch appropriate user actions
   switch (message.t) {
     case 'DISPLAY_STATUS':
-      dispatch(setDisplayStatus(message.d.status == "on"))
+      const displayStatus = message.d.status == "on";
+      setTimeout(() => {
+        dispatch(setDisplayStatus(displayStatus));
+      }, 1000);
       break;
     case 'RFID_DETECT':
       dispatch(detectRFID(message.d))

@@ -5,15 +5,17 @@ import Header from "@/components/shared/Header";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/slices/user.slice";
 import Keyboard from "react-simple-keyboard";
-import "./input.css";
+import "./keyboard-input.css";
+import {selectDisplayStatus} from "@/slices/display.slice";
 
 export default function Layout() {
     const currentUser = useSelector(selectCurrentUser);
     const [layout, setLayout] = useState("default");
     const keyboard = useRef<any>(null);
     const [keyboardVisibility, setKeyboardVisibility] = useState(false);
-    const [input, setInput] = useState("");
     const [focusedInput, setFocusedInput] = useState<HTMLInputElement | null>(null);
+    const [input, setInput] = useState("");
+    const isDisplayOn = useSelector(selectDisplayStatus);
 
     useEffect(() => {
         function clickHandler(e: MouseEvent) {
@@ -62,18 +64,13 @@ export default function Layout() {
         if (button === "{enter}") setKeyboardVisibility(false);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const input = e.target.value;
-        setInput(input);
-        if (keyboard.current) {
-            keyboard.current.setInput(input);
-        }
-    };
-
     if (currentUser == null) {
         return <Navigate replace to="/login" />;
     }
 
+    if (!isDisplayOn) {
+        return <Navigate replace to="/splash" />;
+    }
 
     return (
         <>
