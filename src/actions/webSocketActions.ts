@@ -5,6 +5,8 @@ import {setInterfaces} from "@/slices/network.slice";
 import {setDisplayStatus} from "@/slices/display.slice";
 import NetworkInterface from "@/models/NetworkInterface";
 import {useNavigate} from "react-router-dom";
+import Wifi from "@/models/Wifi";
+import {addOrUpdateNetwork} from "@/slices/wifi.slice";
 
 export const listenToWebSocket = createAsyncThunk('webSocket/listenToWebSocket', async (_, { dispatch }) => {
   webSocketService.addEventListener('message', (message: {data: any}) => {
@@ -30,6 +32,10 @@ function handleWebSocketMessage(message: any, dispatch: any) {
     case 'NETWORK_INTERFACES':
       const interfaces: NetworkInterface[] = message.d;
       dispatch(setInterfaces(interfaces))
+      break;
+    case 'WIFI_NETWORK_FOUND':
+      const wifi: Wifi = message.d;
+      dispatch(addOrUpdateNetwork(wifi))
       break;
     // Handle other message types
     default:

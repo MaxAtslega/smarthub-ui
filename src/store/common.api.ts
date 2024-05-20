@@ -10,6 +10,6 @@ export const commonApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ['User', 'System'],
+    tagTypes: ['User', 'System', 'Constant'],
     endpoints: _ => ({}),
 });

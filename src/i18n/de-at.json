@@ -1,0 +1,10 @@
+{
+  "setup": {
+    "title": "Willkommen, {{username}}!",
+    "message": "Herzlichen Glückwunsch zur Erstellung Ihres Profils und zur Anmeldung! Um die beste Erfahrung zu gewährleisten, nehmen Sie sich bitte einen Moment Zeit, um die folgenden Einstellungen abzuschließen:"
+  },
+  "button": {
+    "exit": "Verlassen",
+    "next": "Weiter"
+  }
+}

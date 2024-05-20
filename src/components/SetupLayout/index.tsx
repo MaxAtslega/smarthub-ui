@@ -8,36 +8,15 @@ import {selectDisplayStatus} from "@/slices/display.slice";
 import {useGetConstantsByUserIdQuery} from "@/api/constants.api";
 import Keyboard from "@/components/shared/Keyboard";
 
-export default function Layout() {
-    const currentUser = useSelector(selectCurrentUser);
+export default function SetupLayout() {
     const [keyboardVisibility, setKeyboardVisibility] = useState(false);
-    const isDisplayOn = useSelector(selectDisplayStatus);
-    const { data: constants, error, isLoading } = useGetConstantsByUserIdQuery(currentUser?.id ?? 0, {
-        skip: currentUser === null,
-    });
-
-    if (currentUser === null) {
-        return <Navigate to="/login" />;
-    }
-
-    // Redirect if constants are empty
-    if (!isLoading && constants && constants.length === 0) {
-        return <Navigate to="/setup" />;
-    }
-
-    if (!isDisplayOn) {
-        return <Navigate to="/splash" />;
-    }
-
-    if (isLoading) return <div></div>;
-    if (error) return <Navigate replace to="/login" />;
 
     return (
         <>
             <Header />
             <main
                 className={`fixed top-[46px] left-0 w-full ${
-                    keyboardVisibility ? "h-[213px]" : "h-[360px]"
+                    keyboardVisibility ? "h-[293px]" : "h-[434px]"
                 }`}
             >
                 <div className={"h-full w-full overflow-x-hidden overflow-y-auto"}>
@@ -47,8 +26,6 @@ export default function Layout() {
                 </div>
 
                 <Keyboard visibility={keyboardVisibility} setVisibility={setKeyboardVisibility}/>
-
-                {!keyboardVisibility && <Navigator />}
             </main>
         </>
     );

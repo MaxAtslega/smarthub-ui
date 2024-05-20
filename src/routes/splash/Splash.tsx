@@ -103,7 +103,7 @@ function Splash() {
             const storedImage = localStorage.getItem('weatherImage');
             const storedTimestamp = localStorage.getItem('weatherImageTimestamp');
             const currentTime = Date.now();
-            const twoHours = 2 * 60 * 60 * 1000;
+            const twoHours = 1200000;
 
             if (storedImage && storedTimestamp && currentTime - parseInt(storedTimestamp, 10) < twoHours) {
                 setImageUrl(storedImage);

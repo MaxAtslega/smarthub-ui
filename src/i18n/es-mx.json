@@ -1,0 +1,10 @@
+{
+  "setup": {
+    "title": "Welcome, {{username}}!",
+    "message": "Congratulations on creating your profile and logging in! To ensure the best experience, please take a moment to complete the following setup:"
+  },
+  "button": {
+    "exit": "Exit",
+    "next": "Next"
+  }
+}

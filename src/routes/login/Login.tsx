@@ -8,6 +8,8 @@ import {store} from "@/store";
 import {BiPencil} from "react-icons/bi";
 import {useGetUsersQuery} from "@/api/users.api";
 import {IoMdAdd} from "react-icons/io";
+import {useTranslation} from "react-i18next";
+import {TITLE} from "@/constants/constants";
 
 const Login = () => {
   const { data: users = [], isLoading: usersLoading } = useGetUsersQuery();
@@ -15,6 +17,7 @@ const Login = () => {
   const [date, setDate] = useState(new Date());
   const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const intervalId = setInterval(() => setDate(new Date()), 1000 * 20);
@@ -27,7 +30,10 @@ const Login = () => {
 
   const handleLogin = (user: User) =>{
     store.dispatch(selectUser(user));
-    navigate('/app/dashboard');
+
+    i18n.changeLanguage(user.language == "en" ? "en-US" : user.language).then(r => {
+      navigate('/app/dashboard');
+    });
   }
 
 
@@ -41,7 +47,7 @@ const Login = () => {
       </div>
 
       <div className={"h-full pt-[50px] flex flex-col items-center"}>
-        <h1 className={"content-center pb-5"}>Welcome!</h1>
+        <h1 className={"content-center pb-5"}>{TITLE}</h1>
         <div style={{ scrollbarWidth: "none" }} className={"pl-8 flex w-full overflow-x-auto " + (users.length < 5 ? "justify-center" : "justify-start")}>
           {users.map((user: User) => (
               <div key={user.id} onClick={() => handleLogin(user)}
@@ -57,7 +63,7 @@ const Login = () => {
 
       <div className={"flex p-4 items-end justify-end"}>
         <Link to={"/create-profile"} className={"bg-background-secondary py-2 px-4 flex align-middle rounded cursor-pointer"}>
-          <IoMdAdd  className={"text-2xl mr-3"}/>
+          <IoMdAdd className={"text-2xl mr-3"}/>
           <span>Create Profile</span>
         </Link>
       </div>

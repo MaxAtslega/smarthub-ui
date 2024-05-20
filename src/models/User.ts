@@ -2,8 +2,9 @@ interface User {
   id?: number;
   username: string;
   theme: number;
-  birthday: String,
-  language: String,
+  birthday: string,
+  language: string,
+  keyboard: string,
 }
 
-export default User;
+  export default User;

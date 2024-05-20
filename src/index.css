@@ -108,3 +108,17 @@ button:focus {
   border: none;
   outline: none;
 }
+
+select {
+  background: #111315;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+
+  border: none;
+  outline: none;
+}
+
+select:focus {
+  border: none;
+  outline: none;
+}

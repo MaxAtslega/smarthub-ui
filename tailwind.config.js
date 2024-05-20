@@ -20,7 +20,8 @@ export default {
         },
         special: {
           red: "rgba(254, 76, 108, 1)",
-          redColor: "rgba(48, 48, 48, 1)",
+          green: "rgb(39,255,8)",
+          redColor: "rgb(30,30,30)",
         },
         primary: {
           100: '#0746eb',

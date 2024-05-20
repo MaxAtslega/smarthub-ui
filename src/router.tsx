@@ -16,9 +16,11 @@ import Actions from "@/routes/settings/Actions";
 import Accounts from "@/routes/settings/Accounts";
 import Clock from "@/routes/clock/Clock";
 import Login from "@/routes/login/Login";
-import Network from "@/routes/settings/Network";
 import CreateProfile from "@/routes/profile/CreateProfile";
 import Splash from "@/routes/splash/Splash";
+import SetupLayout from "@/components/SetupLayout";
+import Network from "@/routes/setup/Network";
+import ConnectWifi from "@/routes/setup/ConnectWifi";
 
 export default createBrowserRouter([
     {
@@ -36,10 +38,26 @@ export default createBrowserRouter([
         path: "/splash",
         element: <Splash />,
     },
-
     {
-        path: "/create-profile",
-        element: <CreateProfile />,
+        element: <SetupLayout/>,
+        children: [
+            {
+                path: "/setup",
+                element: <Setup />,
+            },
+            {
+                path: "/setup/network",
+                element: <Network />,
+            },
+            {
+                path: "/setup/network/wifi",
+                element: <ConnectWifi />,
+            },
+            {
+                path: "/create-profile",
+                element: <CreateProfile />,
+            },
+        ]
     },
     {
         element: <Layout/>,
@@ -107,9 +125,5 @@ export default createBrowserRouter([
                 element: <Notifications/>,
             },
         ]
-    },
-    {
-        path: "system/setup",
-        element: <Setup />,
     },
 ]);

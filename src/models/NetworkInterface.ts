@@ -1,8 +1,25 @@
+interface V4Address {
+    broadcast: string;
+    ip: string;
+    netmask: string;
+}
+
+interface V6Address {
+    broadcast: null;
+    ip: string;
+    netmask: string;
+}
+
+interface NetworkAddress {
+    V4?: V4Address;
+    V6?: V6Address;
+}
+
 interface NetworkInterface {
-    name: string;
-    addr: ({V4: { broadcast: string, ip: string, netmask: string }} | {V6: { broadcast: string, ip: string, netmask: string }})[]
+    addr: NetworkAddress[];
+    index: number;
     mac_addr: string;
-    index: number,
+    name: string;
 }
 
 export default NetworkInterface;
