@@ -7,6 +7,7 @@ import { commonApi } from './common.api';
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {weatherApi} from "@/api/weather.api";
 import wifiSlice from "@/slices/wifi.slice";
+import bluetoothSlice from "@/slices/bluetooth.slice";
 
 const rootReducer = combineReducers({
   [commonApi.reducerPath]: commonApi.reducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   rfid: rfidSlice,
   network: networkSlice,
   display: displaySlice,
-  wifi: wifiSlice
+  wifi: wifiSlice,
+  bluetooth: bluetoothSlice
 });
 
 export const store = configureStore({

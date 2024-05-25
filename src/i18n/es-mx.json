@@ -3,8 +3,24 @@
     "title": "Welcome, {{username}}!",
     "message": "Congratulations on creating your profile and logging in! To ensure the best experience, please take a moment to complete the following setup:"
   },
+  "location": {
+    "title": "Ubicación",
+    "info": "Usamos esta información para brindarle datos meteorológicos precisos.",
+    "cityLabel": "Escriba su ciudad:",
+    "cityPlaceholder": "Su ciudad",
+    "countryLabel": "Escriba su país:",
+    "countryPlaceholder": "Su país",
+    "error": {
+      "input": "Por favor ingrese tanto la ciudad como el país.",
+      "fetch": "Error al obtener datos meteorológicos.",
+      "user": "Faltan datos del usuario.",
+      "post": "Error al establecer o actualizar los datos de ubicación."
+    },
+    "loading": "Cargando datos meteorológicos...",
+    "weatherData": "Datos Meteorológicos"
+  },
   "button": {
-    "exit": "Exit",
-    "next": "Next"
+    "exit": "Atrás",
+    "next": "Siguiente"
   }
 }

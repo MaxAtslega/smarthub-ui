@@ -1,105 +1,178 @@
-import {useSelector} from "react-redux";
-import {getInterfacesData} from "@/slices/network.slice";
+import {useDispatch, useSelector} from "react-redux";
+import {getEthernetInterface, getInterfacesData, getNetworkStatus, getWlanInterface} from "@/slices/network.slice";
 import React, {useEffect, useState} from "react";
 import checkInternetConnectivity from "@/utils/checkInternetConnectivity";
-import {webSocketService} from "@/services/webSocketService";
-import {selectWifiNetworks} from "@/slices/wifi.slice";
-import {store} from "@/store";
-import {selectUser} from "@/slices/user.slice";
+import {activateWlan, deactivateWlan, getScanResults, isWlanActivated} from "@/slices/wifi.slice";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import isPasswordProtected from "@/utils/isPasswordProtected";
 import WifiIcon from "@/components/shared/WifiIcon";
-
-
-
+import {
+    useConnectWifiMutation,
+    useDisconnectWifiMutation,
+    useStartScanMutation,
+    useStartWpaSupplicantMutation, useStopWpaSupplicantMutation
+} from "@/api/wifi.api";
+import {ScanResult} from "@/models/Wifi";
 
 const Network = () => {
-    const interfaces = useSelector(getInterfacesData);
+    const ethernetInterface = useSelector(getEthernetInterface);
+
+    const wlanInterface = useSelector(getWlanInterface);
+    const wlanStatus = useSelector(getNetworkStatus);
+    const scanResults = useSelector(getScanResults);
+
     const [isEthernetConnected, setIsEthernetConnected] = useState<boolean>(false);
-    const [isWlanConnected, setIsWlanConnected] = useState<boolean>(false);
     const { t, i18n } = useTranslation();
     const [isInternetReachable, setIsInternetReachable] = useState<boolean>(false);
 
-    const ethernetInterface = interfaces.find(intf => intf.name === 'eth0');
-    const wlanInterface = interfaces.find(intf => intf.name === 'wlan0');
-
-    const wifiNetworks = useSelector(selectWifiNetworks);
     const navigate = useNavigate();
 
-    const sortedWifiNetworks = [...wifiNetworks].sort((a, b) => parseInt(b.signal_level, 10) - parseInt(a.signal_level, 10));
+    const [connectWifi] = useConnectWifiMutation();
+    const [disconnectWifi] = useDisconnectWifiMutation();
+    const [startWpaSupplicant] = useStartWpaSupplicantMutation();
+    const [stopWpaSupplicant] = useStopWpaSupplicantMutation();
+    const [startScan] = useStartScanMutation();
+
+    const connectToWifi = (wifi: ScanResult) => {
+        if (!isPasswordProtected(wifi.flags)){
+            connectWifi({
+                ssid: wifi.ssid
+            });
+        } else {
+            navigate("/setup/network/wifi", {state: {wifi: wifi}});
+        }
+    }
+
+
+    let connectedWifi: ScanResult | undefined = undefined;
+
+    if (wlanStatus && wlanStatus.ssid != undefined) {
+        if(scanResults && scanResults.length > 0){
+            connectedWifi = scanResults.find(wifi => wifi.ssid === wlanStatus.ssid);
+        }
+    }
 
     useEffect(() => {
+        startScan();
+
         const intervalId = setInterval(() => {
-            webSocketService.sendMessage(JSON.stringify({
-                t: "SCAN",
-                op: 3,
-                d: {}
-            }));
-        }, 20000); // 20000 milliseconds = 20 seconds
+            startScan();
+        }, 30000); // 30000 milliseconds = 30 seconds
 
         // Clear interval on component unmount
         return () => clearInterval(intervalId);
     }, []);
 
+
     useEffect(() => {
         const checkConnectivity = async () => {
+            let internetStatus = false;
+
             if (ethernetInterface && ethernetInterface.addr.length > 0) {
                 setIsEthernetConnected(true);
-                const internetStatus = await checkInternetConnectivity();
-                setIsInternetReachable(internetStatus);
-            } else if (wlanInterface && wlanInterface.addr.length > 0) {
-                setIsWlanConnected(true);
-                const internetStatus = await checkInternetConnectivity();
-                setIsInternetReachable(internetStatus);
+                internetStatus = await checkInternetConnectivity();
             } else {
                 setIsEthernetConnected(false);
-                setIsInternetReachable(false);
             }
+
+            if (wlanInterface && wlanInterface.addr.length > 0) {
+                internetStatus = await checkInternetConnectivity();
+            } else {
+            }
+
+            setIsInternetReachable(internetStatus);
         };
 
-        checkConnectivity();
-    }, [ethernetInterface]);
+        checkConnectivity().then();
+    }, [ethernetInterface, wlanInterface]);
 
+
+    let sortedWifiNetworks: ScanResult[] = [];
+
+    if (scanResults && scanResults.length > 0) {
+        const uniqueNetworksMap = scanResults.reduce((acc, network) => {
+            if (!acc[network.ssid] || parseInt(network.signal_level, 10) > parseInt(acc[network.ssid].signal_level, 10)) {
+                acc[network.ssid] = network;
+            }
+            return acc;
+        }, {} as Record<string, ScanResult>);
+
+        sortedWifiNetworks = Object.values(uniqueNetworksMap).filter(value => value.ssid != connectedWifi?.ssid).sort((a, b) => parseInt(b.signal_level, 10) - parseInt(a.signal_level, 10));
+    }
 
     return (
         <>
             <div>
-                <h2>Network</h2>
+                <h2>{t('network.title', 'Network')}</h2>
 
                 {isEthernetConnected && isInternetReachable && (
                     <div className={"mt-4 p-2 rounded bg-special-green text-black"}>
-                        <span>You are connected via Ethernet. You can continue...</span>
+                        <span>{t('network.ethernetConnected', 'You are connected via Ethernet. You can continue...')}</span>
                     </div>
                 )}
 
-                {isWlanConnected && isInternetReachable && (
-                    <div className={"mt-4 p-2 rounded bg-special-green text-black"}>
-                        <span>You are connected via Wlan. You can continue...</span>
-                    </div>
-                )}
-
-                <div className={"mt-4"}>
-                    <span className={"text-sm ml-2 opacity-80"}>Available Networks</span>
-
-                    {sortedWifiNetworks.map((network, index) => (
-                        <div key={index} className={"p-4 rounded bg-background-secondary mb-2 flex h-full items-center"} onClick={() => navigate("/setup/network/wifi", {state: { wifi: network }})}>
-                            <span  className={"mr-4 text-2xl"}>
-                                <WifiIcon signalLevel={parseInt(network.signal_level, 10)} isProtected={isPasswordProtected(network.capability)} />
-                            </span>
-
-                            <span className={"inline-block"}>{network.ssid}</span>
-                        </div>
-                    ))}
+                <div
+                    className={"py-2 px-4 rounded bg-background-secondary mt-4 flex justify-between h-full items-center"}>
+                    {wlanStatus == undefined || wlanStatus.status === "DEACTIVATED" ? (
+                        <>
+                            <span>{t('network.wlanOff', 'Off')}</span>
+                            <button onClick={() => startWpaSupplicant()}>{t('network.wlanEnable', 'Enable')}</button>
+                        </>
+                    ) : (
+                        <>
+                            <span>{t('network.wlanOn', 'On')}</span>
+                            <button onClick={() => stopWpaSupplicant()}>{t('network.wlanDisable', 'Disable')}</button>
+                        </>
+                    )}
                 </div>
 
+                {(wlanStatus != undefined && wlanStatus.status !== "DEACTIVATED") && (
+                    <>
+                        {connectedWifi && (
+                            <div className={"mt-2"}>
+                                <span className={"text-sm ml-2 opacity-80"}>{t('network.currentNetwork', 'Current Network')}</span>
+                                <div className={"p-4 rounded bg-background-secondary mb-2 flex h-full items-center justify-between"}>
+                                    <div className={"flex items-center"}>
+                                        <span className={"mr-4 text-2xl"}>
+                                            <WifiIcon signalLevel={parseInt(connectedWifi.signal_level, 10)}
+                                                      isProtected={isPasswordProtected(connectedWifi.flags)} />
+                                        </span>
+                                        <div>
+                                            <span className={"inline-block"}>{connectedWifi.ssid}</span>
+                                            <span className={"block text-[0.7rem] opacity-60"}>{t('network.connected', 'Connected')}</span>
+                                        </div>
+                                    </div>
+
+                                    <button onClick={() => disconnectWifi()}>{t('network.disconnect', 'Disconnect')}</button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className={"mt-2"}>
+                            <span className={"text-sm ml-2 opacity-80"}>
+                                {sortedWifiNetworks.length > 0 ? t('network.availableNetworks', 'Available Networks') : t('network.scanning', 'Scanning for Networks...')}
+                            </span>
+                            {sortedWifiNetworks.map((network, index) => (
+                                <div key={index} className={"p-4 rounded bg-background-secondary mb-2 flex h-full items-center"}
+                                     onClick={() => connectToWifi(network)}>
+                                    <span className={"mr-4 text-2xl"}>
+                                        <WifiIcon signalLevel={parseInt(network.signal_level, 10)}
+                                                  isProtected={isPasswordProtected(network.flags)} />
+                                    </span>
+
+                                    <span className={"inline-block"}>{network.ssid}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
 
-            <div className={"mt-8"}>
-                <button onClick={() => navigate(-1)} className={""}>{t('button.back')}</button>
-                <button disabled={!isEthernetConnected} className={"ml-4"}>{t('button.next')}</button>
+            <div className={"mt-4 pb-4"}>
+                <button onClick={() => navigate(-1)} className={""}>{t('button.back', 'Back')}</button>
+                <button disabled={!isInternetReachable} onClick={() => navigate("/setup/location")} className={"ml-4"}>{t('button.next', 'Next')}</button>
             </div>
-
         </>
     )
 }

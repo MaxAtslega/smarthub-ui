@@ -4,6 +4,9 @@ import {OPENAI_API_KEY} from "@/constants/constants";
 import { useNavigate } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {selectDisplayStatus, setDisplayStatus} from "@/slices/display.slice";
+import {useGetConstantsByUserIdQuery} from "@/api/constants.api";
+import {selectCurrentUser} from "@/slices/user.slice";
+import quotes from "@/constants/quotes.json";
 
 const generatePrompt = (temperature: number, description: string): string => {
     if (temperature < 0) {
@@ -41,14 +44,42 @@ const generatePrompt = (temperature: number, description: string): string => {
     }
 };
 
+const getRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    return quotes[randomIndex];
+}
+
 function Splash() {
     const city = "Lage (Lippe)";
     const [error, setError] = useState<null | string>(null);
     const [date, setDate] = useState(new Date());
-    const { data: weatherData, error: weatherError } = useGetWeatherByCoordinatesQuery({
-        lat: "33.44",
-        lon: "-94.04"
-    });
+    const currentUser = useSelector(selectCurrentUser);
+    const { data: constants, isLoading: constantsLoading } = useGetConstantsByUserIdQuery(currentUser?.id == null ? 0 : currentUser.id);
+    const [quote, setQuote] = useState(getRandomQuote());
+
+    const [lat, setLat] = useState<string | null>(null);
+    const [lon, setLon] = useState<string | null>(null);
+
+    const [temperature, setTemperature] = useState<number>(0);
+
+    const { data: weatherData, error: weatherError } = useGetWeatherByCoordinatesQuery(
+        lat && lon ? { lat, lon } : { lat: "33.44", lon: "-94.04" },
+        {
+            skip: lat === null || lon === null
+        }
+    );
+
+    useEffect(() => {
+        if (constants) {
+            const locationConstant = constants.find(c => c.name === 'LOCATION');
+            if (locationConstant) {
+                const location = JSON.parse(locationConstant.value);
+                setLat(location.lat);
+                setLon(location.lon);
+            }
+        }
+    }, [constants]);
+
     const navigate = useNavigate();
     const isDisplayOn = useSelector(selectDisplayStatus);
 
@@ -99,11 +130,13 @@ function Splash() {
             const temperature = weatherData.current.temp - 273.15; // Convert from Kelvin to Celsius
             const description = weatherData.current.weather[0].description;
 
+            setTemperature(temperature);
+
             // Check localStorage for an existing image and its timestamp
             const storedImage = localStorage.getItem('weatherImage');
             const storedTimestamp = localStorage.getItem('weatherImageTimestamp');
             const currentTime = Date.now();
-            const twoHours = 1200000;
+            const twoHours = 12000000;
 
             if (storedImage && storedTimestamp && currentTime - parseInt(storedTimestamp, 10) < twoHours) {
                 setImageUrl(storedImage);
@@ -134,10 +167,17 @@ function Splash() {
     } else {
         return (
             <div className={"flex justify-between h-[480px]"} onClick={handlePageClick}>
+                <span
+                    className={"fixed right-[330px] text-5xl font-bold drop-shadow-4xl"}>{temperature.toPrecision(4)}°C</span>
                 <img src={imageUrl} width={"480px"} alt={""}/>
+                <div className={"fixed bottom-2 left-2 drop-shadow-4xl w-[460px] text-wrap"}>
+                    <span className={"block text-2xl font-bold text-wrap drop-shadow-4xl mb-2"}>{quote.text}</span>
+                    <span className={"text-xl drop-shadow-4xl"}><em>- {quote.from}</em></span>
+                </div>
                 <div className={"p-2 w-[320px] flex items-center justify-center"}>
                     <div>
-                        <span className={"flex justify-center text-4xl font-bold block"}>{date.getHours()}:{date.getMinutes()}</span>
+                        <span
+                            className={"flex justify-center text-4xl font-bold block"}>{date.getHours()}:{String(date.getMinutes()).padStart(2, "0")}</span>
                         <span
                             className={"text-2xl font-medium pt-1 block"}>{dateAsFormattedString}</span>
                     </div>

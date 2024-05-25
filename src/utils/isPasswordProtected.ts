@@ -1,10 +1,9 @@
 /**
  * Checks if the network is password-protected based on the capability string.
- * @param {string} capabilityString - The capability string of the network.
+ * @param {string} flags - The flags of the network.
  * @return {boolean} - Returns true if the network is password-protected, false otherwise.
  */
-function isPasswordProtected(capabilityString: string): boolean {
-    return capabilityString.includes("Privacy");
-}
+function isPasswordProtected(flags: string): boolean {
+    return flags.includes("WPA") || flags.includes("WEP");}
 
 export default isPasswordProtected

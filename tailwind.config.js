@@ -12,6 +12,11 @@ export default {
       body: ['caption'],
     },
     extend: {
+      dropShadow: {
+        '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
+        '4xl': '0 45px 65px rgba(0, 0, 0, 0.40)'
+
+      },
       colors: {
         background: {
           default: '#000000',

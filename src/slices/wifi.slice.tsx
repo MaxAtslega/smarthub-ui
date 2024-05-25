@@ -1,39 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import WifiNetwork from "@/models/Wifi";
+import {NetworkStatusResponse, ScanResult} from "@/models/Wifi";
 
 interface WifiState {
-  networks: WifiNetwork[];
+  activated: boolean;
+  results: ScanResult[];
 }
 
 const initialState: WifiState = {
-  networks: [],
+  activated: true,
+  results: []
 };
 
 const wifiSlice = createSlice({
   name: 'wifi',
   initialState,
   reducers: {
-    addOrUpdateNetwork: (state, action: PayloadAction<WifiNetwork>) => {
-      const index = state.networks.findIndex(network => network.ssid === action.payload.ssid);
-      if (index !== -1) {
-        // Replace the existing network entry
-        const existingNetwork = state.networks[index];
-        if (parseInt(action.payload.signal_level, 10) > parseInt(existingNetwork.signal_level, 10)) {
-          // Update the network with the stronger signal
-          state.networks[index] = action.payload;
-        }
-      } else {
-        // Add the new network entry
-        state.networks.push(action.payload);
-      }
+    activateWlan(state) {
+      state.activated = true;
     },
-    clearNetworks: (state) => {
-      state.networks = [];
+    deactivateWlan(state) {
+      state.activated = false;
     },
+    setScanResults(state, action: PayloadAction<ScanResult[]>){
+      state.results = action.payload;
+    }
   },
 });
 
-export const { addOrUpdateNetwork, clearNetworks } = wifiSlice.actions;
-export const selectWifiNetworks = (state: { wifi: WifiState }) => state.wifi.networks;
+export const { activateWlan, deactivateWlan, setScanResults } = wifiSlice.actions;
+export const isWlanActivated = (state: { wifi: WifiState }) => state.wifi.activated;
+export const getScanResults = (state: { wifi: WifiState }) => state.wifi.results;
 
 export default wifiSlice.reducer;

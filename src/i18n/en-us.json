@@ -4,6 +4,35 @@
     "message": "Congratulations on creating your profile and logging in! To ensure the best experience, please take a moment to complete the following setup:",
     "error": "An error has occurred while setting the language"
   },
+  "location": {
+    "title": "Location",
+    "info": "We use this information to deliver accurate weather data to you.",
+    "cityLabel": "Type your city:",
+    "cityPlaceholder": "Your city",
+    "countryLabel": "Type your country:",
+    "countryPlaceholder": "Your country",
+    "error": {
+      "input": "Please enter both city and country.",
+      "fetch": "Failed to fetch weather data.",
+      "user": "User information is missing.",
+      "post": "Failed to set or update location data."
+    },
+    "loading": "Loading weather data...",
+    "weatherData": "Weather Data"
+  },
+  "network": {
+    "title": "Network",
+    "ethernetConnected": "You are connected via Ethernet. You can continue...",
+    "wlanOff": "Off",
+    "wlanEnable": "Enable",
+    "wlanOn": "On",
+    "wlanDisable": "Disable",
+    "currentNetwork": "Current Network",
+    "connected": "Connected",
+    "disconnect": "Disconnect",
+    "availableNetworks": "Available Networks",
+    "scanning": "Scanning for Networks..."
+  },
   "button": {
     "exit": "Exit",
     "next": "Next"

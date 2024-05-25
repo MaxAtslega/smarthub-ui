@@ -19,4 +19,4 @@ export const weatherApi = createApi({
 
 
 
-export const { useGetWeatherByCoordinatesQuery  } = weatherApi;
+export const { useGetWeatherByCoordinatesQuery, useGetWeatherByCityQuery  } = weatherApi;

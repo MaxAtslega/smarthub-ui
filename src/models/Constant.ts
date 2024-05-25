@@ -2,7 +2,7 @@ interface Constant {
     id?: number;
     name: string;
     user_id: number;
-    value: String,
+    value: string,
 }
 
 export default Constant;

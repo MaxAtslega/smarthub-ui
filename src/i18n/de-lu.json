@@ -3,6 +3,22 @@
     "title": "Willkommen, {{username}}!",
     "message": "Herzlichen Glückwunsch zur Erstellung Ihres Profils und zur Anmeldung! Um die beste Erfahrung zu gewährleisten, nehmen Sie sich bitte einen Moment Zeit, um die folgenden Einstellungen abzuschließen:"
   },
+  "location": {
+    "title": "Ort",
+    "info": "Wir verwenden diese Informationen, um Ihnen genaue Wetterdaten zu liefern.",
+    "cityLabel": "Geben Sie Ihre Stadt ein:",
+    "cityPlaceholder": "Ihre Stadt",
+    "countryLabel": "Geben Sie Ihr Land ein:",
+    "countryPlaceholder": "Ihr Land",
+    "error": {
+      "input": "Bitte geben Sie sowohl Stadt als auch Land ein.",
+      "fetch": "Fehler beim Abrufen der Wetterdaten.",
+      "user": "Benutzerinformationen fehlen.",
+      "post": "Fehler beim Festlegen oder Aktualisieren der Standortdaten."
+    },
+    "loading": "Wetterdaten werden geladen...",
+    "weatherData": "Wetterdaten"
+  },
   "button": {
     "exit": "Verlassen",
     "next": "Weiter"

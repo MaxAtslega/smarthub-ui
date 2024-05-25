@@ -21,6 +21,8 @@ import Splash from "@/routes/splash/Splash";
 import SetupLayout from "@/components/SetupLayout";
 import Network from "@/routes/setup/Network";
 import ConnectWifi from "@/routes/setup/ConnectWifi";
+import Location from "@/routes/setup/Location";
+import NetworkSettings from "@/routes/settings/Network"
 
 export default createBrowserRouter([
     {
@@ -56,6 +58,10 @@ export default createBrowserRouter([
             {
                 path: "/create-profile",
                 element: <CreateProfile />,
+            },
+            {
+                path: "/setup/location",
+                element: <Location />,
             },
         ]
     },
@@ -100,7 +106,7 @@ export default createBrowserRouter([
                     },
                     {
                         path: "network",
-                        element: <Network/>,
+                        element: <NetworkSettings />,
                     },
                     {
                         path: "actions",

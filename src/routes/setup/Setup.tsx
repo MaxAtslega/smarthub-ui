@@ -4,11 +4,9 @@ import React from "react";
 import {Navigate, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {store} from "@/store";
-import {useCreateUserMutation, useUpdateUserMutation} from "@/api/users.api";
+import {useUpdateUserMutation} from "@/api/users.api";
 import User from "@/models/User";
 import keyboardLayouts from "@/constants/keyboardLayouts";
-import {Simulate} from "react-dom/test-utils";
-import cut = Simulate.cut;
 
 function Setup() {
     const currentUser = useSelector(selectCurrentUser);

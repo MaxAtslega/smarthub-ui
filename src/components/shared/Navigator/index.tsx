@@ -13,9 +13,14 @@ import useLongPress from "@/utils/useLongPress";
 import "./navigator.css"
 import {LuClock} from "react-icons/lu";
 import {BsWifi} from "react-icons/bs";
-import {FaWifi} from "react-icons/fa";
+import {FaEthernet, FaWifi} from "react-icons/fa";
 import {IoWifiSharp} from "react-icons/io5";
 import {webSocketService} from "@/services/webSocketService";
+import {useSelector} from "react-redux";
+import {getEthernetInterface, getWlanInterface} from "@/slices/network.slice";
+import {useTranslation} from "react-i18next";
+import {getDevices, startDiscovering, stopDiscovering} from "@/utils/bluetooth";
+import {RootState} from "@/store";
 
 const Navigator = () => {
     return (
@@ -119,26 +124,28 @@ const VolumeControlItem = () =>  {
 
 const BluetoothItem = () => {
     const navigate = useNavigate();
+    const { devices } = useSelector((state: RootState) => state.bluetooth);
     const [bluetooth, setBluetooth] = useState(false);
 
-    function toggleBluetooth(){
-        setBluetooth(!bluetooth)
-    }
+    useEffect(() => {
+        getDevices();
+    }, []);
+
+    useEffect(() => {
+        setBluetooth(devices.filter(device => device.connected).length > 0);
+    }, [devices]);
 
     const onLongPress = () => {
-        setBluetooth(true)
         navigate("/system/settings/bluetooth")
     };
 
-    const onClick = () => {
-        toggleBluetooth()
-    }
 
     const defaultOptions = {
         shouldPreventDefault: true,
         delay: 200,
     };
-    const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+
+    const longPressEvent = useLongPress(onLongPress, () => {}, defaultOptions);
 
     return (
         <div {...longPressEvent} className={`cursor-pointer h-[48px] w-[48px] flex items-center justify-center 
@@ -149,20 +156,17 @@ const BluetoothItem = () => {
 
 const WifiItem = () => {
     const navigate = useNavigate();
-    const [wifi, setWifi] = useState(true);
-
-    function toggleBluetooth(){
-        setWifi(!wifi)
-    }
+    const { t } = useTranslation();
+    const ethernetInterface = useSelector(getEthernetInterface);
+    const wlanInterface = useSelector(getWlanInterface);
 
     const onLongPress = () => {
-        setWifi(true)
-        navigate("/system/settings/network")
+        navigate("/system/settings/network");
     };
 
     const onClick = () => {
-        toggleBluetooth()
-    }
+        // You can add any additional click functionality here if needed
+    };
 
     const defaultOptions = {
         shouldPreventDefault: true,
@@ -170,11 +174,26 @@ const WifiItem = () => {
     };
     const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
 
-    return (
-      <div {...longPressEvent} className={`cursor-pointer h-[48px] w-[48px] flex items-center justify-center 
-        text-xl ${wifi ? "bg-primary-100" : "bg-background-secondary"} mr-3 rounded`}><IoWifiSharp/></div>
-    )
+    let connectionStatus = null;
+    let icon = <FaEthernet  />;
+    let bgColor = "bg-background-secondary";
 
+    if (ethernetInterface && ethernetInterface.addr.length > 0) {
+        connectionStatus = 'ethernet';
+        icon = <FaEthernet  />;
+        bgColor = "bg-primary-100";
+    } else if (wlanInterface && wlanInterface.addr.length > 0) {
+        connectionStatus = 'wifi';
+        icon = <IoWifiSharp />;
+        bgColor = "bg-blue-500";
+    }
+
+    return (
+        <div {...longPressEvent} className={`cursor-pointer h-[48px] w-[48px] flex items-center justify-center 
+        text-xl ${bgColor} mr-3 rounded`}>
+            {icon}
+        </div>
+    );
 }
 
 export default Navigator;

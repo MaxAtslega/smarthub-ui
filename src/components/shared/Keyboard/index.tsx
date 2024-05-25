@@ -45,6 +45,17 @@ const Keyboard = ({visibility, setVisibility}: {visibility: boolean, setVisibili
     const onChange = (input: string) => {
         if (focusedInput) {
             focusedInput.value = input;
+
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLInputElement.prototype,
+                "value"
+            )?.set;
+            if (nativeInputValueSetter) {
+                nativeInputValueSetter.call(focusedInput, input);
+            }
+
+            const event = new Event("input", { bubbles: true });
+            focusedInput.dispatchEvent(event);
         }
     };
 
@@ -68,7 +79,7 @@ const Keyboard = ({visibility, setVisibility}: {visibility: boolean, setVisibili
                     onKeyPress={onKeyPress}
                     layout={keyboardLayout.layout as KeyboardLayoutObject}
                 />
-            )})
+            )}
         </>
     )
 }
