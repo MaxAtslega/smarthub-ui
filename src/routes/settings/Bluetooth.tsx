@@ -42,65 +42,74 @@ function Bluetooth() {
   return (
       <div>
           <h1>Bluetooth</h1>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-4 mb-4">
               <button onClick={startDiscovering} disabled={discovering}>Start Scanning</button>
               <button onClick={stopDiscovering} disabled={!discovering}>Stop Scanning</button>
           </div>
 
           {devices.filter(device => device.paired).length > 0 ?
               <span className={"text-sm ml-2 opacity-80"}>{t('bluetooth.pairedDevices', 'Paired Devices')}</span> : null}
-          <ul>
+          <div className={"mb-4"}>
               {devices.filter(device => device.paired).map((device: BluetoothDevice) => (
-                  <li key={device.address} className="border mb-2">
-                      <p>Name: {device.name}</p>
-                      <p>Address: {device.address}</p>
-                      <p>Paired: {device.paired ? 'Yes' : 'No'}</p>
-                      <p>Connected: {device.connected ? 'Yes' : 'No'}</p>
-                      <p>Trusted: {device.trusted ? 'Yes' : 'No'}</p>
+                  <div key={device.address} className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
+                      <span className={device.connected ? "text-primary-100" : ""}>{device.name}</span>
+
                       <div className="flex gap-2">
-                          <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
-                              Connect
-                          </button>
-                          <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
-                              Disconnect
-                          </button>
-                          <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
-                              Trust
-                          </button>
-                          <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
-                              Untrust
-                          </button>
+                          {
+                              device.connected ?
+                                  <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
+                                      Disconnect
+                                  </button> :
+                                  <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
+                                      Connect
+                                  </button>
+                          }
+
+                          {
+                              device.trusted ?
+                                  <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
+                                      Untrust
+                                  </button> :
+                                  <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
+                                      Trust
+                                  </button>
+                          }
                       </div>
-                  </li>
+                  </div>
               ))}
-          </ul>
+          </div>
 
           <span className={"text-sm ml-2 opacity-80"}>{t('bluetooth.availableDevices', 'Available Devices')}</span>
-          <ul>
+          <div>
               {devices.filter(device => !device.paired).map((device: BluetoothDevice) => (
-                  <li key={device.address} className="border mb-2">
-                      <p>Name: {device.name}</p>
-                      <p>Address: {device.address}</p>
-                      <p>Paired: {device.paired ? 'Yes' : 'No'}</p>
-                      <p>Connected: {device.connected ? 'Yes' : 'No'}</p>
-                      <p>Trusted: {device.trusted ? 'Yes' : 'No'}</p>
+                  <div key={device.address}
+                       className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
+                      <span>{device.name}</span>
+
                       <div className="flex gap-2">
-                          <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
-                              Connect
-                          </button>
-                          <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
-                              Disconnect
-                          </button>
-                          <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
-                              Trust
-                          </button>
-                          <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
-                              Untrust
-                          </button>
+                          {
+                              device.connected ?
+                                  <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
+                                      Disconnect
+                                  </button> :
+                                  <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
+                                      Connect
+                                  </button>
+                          }
+
+                          {
+                              device.trusted ?
+                                  <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
+                                      Untrust
+                                  </button> :
+                                  <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
+                                      Trust
+                                  </button>
+                          }
                       </div>
-                  </li>
+                  </div>
               ))}
-          </ul>
+          </div>
       </div>
   )
 }

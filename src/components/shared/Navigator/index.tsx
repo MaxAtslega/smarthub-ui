@@ -24,7 +24,7 @@ import {RootState} from "@/store";
 
 const Navigator = () => {
     return (
-        <nav className={"h-[74px] fixed bottom-0  p-3 w-max bg-background-default"}>
+        <nav className={"h-[74px] fixed bottom-0  p-3 w-max"}>
             <div className={"flex items-stretch"}>
                 <NavigatorItem to={"/app/dashboard"}><MdDashboard/></NavigatorItem>
                 <NavigatorItem to={"/app/calendar"}><MdCalendarMonth/></NavigatorItem>
