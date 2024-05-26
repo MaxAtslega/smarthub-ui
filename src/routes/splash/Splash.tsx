@@ -1,14 +1,14 @@
-import {useGetWeatherByCoordinatesQuery} from "@/api/weather.api";
-import React, {useEffect, useState} from "react";
-import {OPENAI_API_KEY} from "@/constants/constants";
+import { useGetWeatherByCoordinatesQuery } from "@/api/weather.api";
+import React, { useEffect, useState } from "react";
+import {API_BASE_URL, OPENAI_API_KEY} from "@/constants/constants";
 import { useNavigate } from 'react-router-dom';
-import {useSelector} from "react-redux";
-import {selectDisplayStatus, setDisplayStatus} from "@/slices/display.slice";
-import {useGetConstantsByUserIdQuery} from "@/api/constants.api";
-import {selectCurrentUser} from "@/slices/user.slice";
+import { useSelector } from "react-redux";
+import { selectDisplayStatus } from "@/slices/display.slice";
+import { useGetConstantsByUserIdQuery } from "@/api/constants.api";
+import { selectCurrentUser } from "@/slices/user.slice";
 import quotes from "@/constants/quotes.json";
 
-const generatePrompt = (temperature: number, description: string): string => {
+const generatePrompt = (temperature: number, description: string) => {
     if (temperature < 0) {
         if (description.includes('snow')) {
             return "A painting of a polar bear playing in the snow with snowflakes falling around.";
@@ -47,20 +47,19 @@ const generatePrompt = (temperature: number, description: string): string => {
 const getRandomQuote = () => {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     return quotes[randomIndex];
-}
+};
 
 function Splash() {
-    const city = "Lage (Lippe)";
-    const [error, setError] = useState<null | string>(null);
+    const [error, setError] = useState<string|null>(null);
     const [date, setDate] = useState(new Date());
     const currentUser = useSelector(selectCurrentUser);
-    const { data: constants, isLoading: constantsLoading } = useGetConstantsByUserIdQuery(currentUser?.id == null ? 0 : currentUser.id);
+    const { data: constants, isLoading: constantsLoading } = useGetConstantsByUserIdQuery(currentUser?.id ?? 0);
     const [quote, setQuote] = useState(getRandomQuote());
 
-    const [lat, setLat] = useState<string | null>(null);
-    const [lon, setLon] = useState<string | null>(null);
+    const [lat, setLat] = useState(null);
+    const [lon, setLon] = useState(null);
 
-    const [temperature, setTemperature] = useState<number>(0);
+    const [temperature, setTemperature] = useState(0);
 
     const { data: weatherData, error: weatherError } = useGetWeatherByCoordinatesQuery(
         lat && lon ? { lat, lon } : { lat: "33.44", lon: "-94.04" },
@@ -88,104 +87,115 @@ function Splash() {
         return () => clearInterval(intervalId);
     }, []);
 
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageData, setImageData] = useState('');
+
+    const fetchImageAsBase64 = async (temperature: number, description:string) => {
+        try {
+            const response = await fetch('https://api.openai.com/v1/images/generations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: 'dall-e-2',
+                    prompt: generatePrompt(temperature, description),
+                    n: 1,
+                    size: "512x512"
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            const imageUrl = data.data[0].url;
+            const proxyUrl = `http://${API_BASE_URL}/proxy-image?url=${encodeURIComponent(imageUrl)}`;
+            const imageResponse = await fetch(proxyUrl);
+            const blob = await imageResponse.blob();
+
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                const base64data = reader.result;
+                if(base64data) {
+                    localStorage.setItem('weatherImage', base64data.toString());
+                    localStorage.setItem('weatherImageTimestamp', Date.now().toString());
+                    setImageData(base64data.toString());
+                }
+            };
+        } catch (err) {
+            console.error(err);
+            setError('An error occurred while fetching the image.');
+        }
+    };
 
     useEffect(() => {
-        const fetchImage = async (temperature: number, description: string) => {
-            try {
-                const response = await fetch('https://api.openai.com/v1/images/generations', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: 'dall-e-2',
-                        prompt: generatePrompt(temperature, description),
-                        n: 1,
-                        size: "512x512"
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                const imageUrl = data.data[0].url;
-
-                // Save to localStorage
-                localStorage.setItem('weatherImage', imageUrl);
-                localStorage.setItem('weatherImageTimestamp', Date.now().toString());
-
-                setImageUrl(imageUrl);
-                setError(null);
-            } catch (err) {
-                console.error(err);
-                setError('An error occurred while fetching the image.');
-            }
-        };
-
         if (weatherData) {
             const temperature = weatherData.current.temp - 273.15; // Convert from Kelvin to Celsius
             const description = weatherData.current.weather[0].description;
 
             setTemperature(temperature);
 
-            // Check localStorage for an existing image and its timestamp
             const storedImage = localStorage.getItem('weatherImage');
             const storedTimestamp = localStorage.getItem('weatherImageTimestamp');
             const currentTime = Date.now();
             const twoHours = 12000000;
 
             if (storedImage && storedTimestamp && currentTime - parseInt(storedTimestamp, 10) < twoHours) {
-                setImageUrl(storedImage);
+                setImageData(storedImage);
             } else {
-                fetchImage(temperature, description).then();
+                fetchImageAsBase64(temperature, description).then();
             }
         }
     }, [weatherData]);
 
     const dateOptions: Intl.DateTimeFormatOptions = { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' };
-
     const dateFormatter = new Intl.DateTimeFormat('en-US', dateOptions);
     const dateAsFormattedString = dateFormatter.format(date);
 
-
     const handlePageClick = () => {
-        if(isDisplayOn){
+        if (isDisplayOn) {
             navigate(-1);
         }
     };
 
-    if (error != null || imageUrl == null) {
+    if (error || !imageData) {
         return (
-            <div className={"flex items-center justify-center h-[480px]"} onClick={handlePageClick}>
-                <span className={"text-6xl font-bold"}>{date.getHours()}:{date.getMinutes()}</span>
+            <div className="flex items-center justify-center h-[480px]" onClick={handlePageClick}>
+                <span className="text-6xl font-bold">{date.getHours()}:{date.getMinutes()}</span>
             </div>
         );
     } else {
         return (
-            <div className={"flex justify-between h-[480px]"} onClick={handlePageClick}>
-                <span
-                    className={"fixed right-[330px] text-5xl font-bold drop-shadow-4xl"}>{temperature.toPrecision(4)}°C</span>
-                <img src={imageUrl} width={"480px"} alt={""}/>
-                <div className={"fixed bottom-2 left-2 drop-shadow-4xl w-[460px] text-wrap"}>
-                    <span className={"block text-2xl font-bold text-wrap drop-shadow-4xl mb-2"}>{quote.text}</span>
-                    <span className={"text-xl drop-shadow-4xl"}><em>- {quote.from}</em></span>
+            <div className="flex justify-between h-[480px]" onClick={handlePageClick}>
+                <span className="fixed right-[330px] text-5xl font-bold drop-shadow-4xl">
+                    {temperature.toPrecision(4)}°C
+                </span>
+                <img src={imageData} width="480px" alt="Weather depiction" />
+                <div className="fixed bottom-2 left-2 drop-shadow-4xl w-[460px] text-wrap">
+                    <span className="block text-2xl font-bold text-wrap drop-shadow-4xl mb-2">
+                        {quote.text}
+                    </span>
+                    <span className="text-xl drop-shadow-4xl">
+                        <em>- {quote.from}</em>
+                    </span>
                 </div>
-                <div className={"p-2 w-[320px] flex items-center justify-center"}>
+                <div className="p-2 w-[320px] flex items-center justify-center">
                     <div>
-                        <span
-                            className={"flex justify-center text-4xl font-bold block"}>{date.getHours()}:{String(date.getMinutes()).padStart(2, "0")}</span>
-                        <span
-                            className={"text-2xl font-medium pt-1 block"}>{dateAsFormattedString}</span>
+                        <span className="flex justify-center text-4xl font-bold block">
+                            {date.getHours()}:{String(date.getMinutes()).padStart(2, "0")}
+                        </span>
+                        <span className="text-2xl font-medium pt-1 block">
+                            {dateAsFormattedString}
+                        </span>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
-
 }
 
-export default Splash
+export default Splash;
