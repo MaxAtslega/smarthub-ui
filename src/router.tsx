@@ -14,7 +14,7 @@ import General from "@/routes/settings/General";
 import Bluetooth from "@/routes/settings/Bluetooth";
 import Actions from "@/routes/settings/Actions";
 import Accounts from "@/routes/settings/Accounts";
-import Clock from "@/routes/clock/Clock";
+import ClockLayout from "@/routes/clock/ClockLayout";
 import Login from "@/routes/login/Login";
 import CreateProfile from "@/routes/profile/CreateProfile";
 import Splash from "@/routes/splash/Splash";
@@ -23,6 +23,10 @@ import Network from "@/routes/setup/Network";
 import ConnectWifi from "@/routes/setup/ConnectWifi";
 import Location from "@/routes/setup/Location";
 import NetworkSettings from "@/routes/settings/Network"
+import Customize from "@/routes/settings/Customize";
+import Clock from "@/routes/clock/Clock";
+import Timer from "@/routes/clock/Timer";
+import Alarm from "@/routes/clock/Alarm";
 
 export default createBrowserRouter([
     {
@@ -89,8 +93,26 @@ export default createBrowserRouter([
                 element: <Weather/>,
             },
             {
-                path: "app/clock",
-                element: <Clock/>,
+                path: "app/clock/",
+                element: <ClockLayout/>,
+                children: [
+                    {
+                        path: "alarm",
+                        element: <Alarm/>,
+                    },
+                    {
+                        path: "timer",
+                        element: <Timer/>,
+                    },
+                    {
+                        path: "clock",
+                        element: <Clock/>,
+                    },
+                    {
+                        path: "",
+                        loader: () => redirect("/app/clock/clock"),
+                    },
+                ]
             },
             {
                 path: "system/settings/",
@@ -118,7 +140,7 @@ export default createBrowserRouter([
                     },
                     {
                         path: "customize",
-                        element: <Accounts/>,
+                        element: <Customize />,
                     },
                     {
                         path: "",

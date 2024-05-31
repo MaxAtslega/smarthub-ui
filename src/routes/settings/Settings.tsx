@@ -22,7 +22,7 @@ function Settings() {
           </div>
           <div className={"ml-[62px] h-full bg-background-secondary w-full rounded"}>
             <div className={""}>
-                <div className={"p-3 h-full"}>
+                <div className={"p-3 min-h-[360px]"}>
                     <Outlet />
                 </div>
             </div>

@@ -165,7 +165,7 @@ function Splash() {
     if (error || !imageData) {
         return (
             <div className="flex items-center justify-center h-[480px]" onClick={handlePageClick}>
-                <span className="text-6xl font-bold">{date.getHours()}:{date.getMinutes()}</span>
+                <span className="text-6xl font-bold">{String(date.getHours()).padStart(2, "0")}:{String(date.getMinutes()).padStart(2, "0")}</span>
             </div>
         );
     } else {
@@ -186,7 +186,7 @@ function Splash() {
                 <div className="p-2 w-[320px] flex items-center justify-center">
                     <div>
                         <span className="flex justify-center text-4xl font-bold block">
-                            {date.getHours()}:{String(date.getMinutes()).padStart(2, "0")}
+                            {String(date.getHours()).padStart(2, "0")}:{String(date.getMinutes()).padStart(2, "0")}
                         </span>
                         <span className="text-2xl font-medium pt-1 block">
                             {dateAsFormattedString}

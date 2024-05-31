@@ -42,7 +42,7 @@ const Login = () => {
       <div className={"h-[38px] w-full px-3 mb-1 pt-1"}>
         <div className={"flex justify-between items-center h-[100%]"}>
           <span
-            className={"flex font-bold text-xs content-center flex-wrap"}>{date.getHours()}:{date.getMinutes()}</span>
+              className={"flex font-bold text-xs content-center flex-wrap"}>{String(date.getHours()).padStart(2, "0")}:{String(date.getMinutes()).padStart(2, "0")}</span>
         </div>
       </div>
 

@@ -37,4 +37,4 @@ export const usersApi = commonApi.injectEndpoints({
 
 
 
-export const { useGetUsersQuery, useCreateUserMutation, useUpdateUserMutation } = usersApi;
+export const { useDeleteUserMutation, useGetUsersQuery, useCreateUserMutation, useUpdateUserMutation } = usersApi;
