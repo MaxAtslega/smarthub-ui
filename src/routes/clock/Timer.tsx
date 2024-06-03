@@ -1,35 +1,29 @@
-import Map from "@/assets/map.svg";
 import React, {useState} from "react";
 import NumberSwiper from "@/components/NumberSwiper";
-
-
-const dateConf = {
-    'hour': {
-        format: 'hh',
-        caption: 'Hour',
-        step: 1,
-    },
-    'minute': {
-        format: 'mm',
-        caption: 'Min',
-        step: 1,
-    },
-    'second': {
-        format: 'hh',
-        caption: 'Sec',
-        step: 1,
-    },
-}
+import {useDispatch, useSelector} from "react-redux";
+import {setActive, setTimer} from "@/slices/timer.slice";
+import {RootState} from "@/store";
 
 
 function Timer () {
-    const [value, setValue] = useState<number>(0);
+    const dispatch = useDispatch();
+    const [value, setValue]: [string, (value: (((prevState: string) => string) | string)) => void] = useState<string>("00:00:00");
+    const timer = useSelector((state: RootState) => state.timer.timer);
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl font-bold mb-6">Number Swiper Example</h1>
-            <p className="mb-6">Run This Demo On Touch Devices</p>
-            <NumberSwiper maxNumberCol1={59} maxNumberCol2={59} maxNumberCol3={100} elementId="myNumberSwiper" initialValue={0} />
+        <div className="flex items-center justify-center w-full text-5xl">
+            <button onClick={() => {
+                dispatch(setActive(false))
+            }} className={"text-xl mt-3 w-full h-full"}>Stop</button>
+
+            <div className={"w-full mx-6"}>
+                <NumberSwiper value={value} timer={timer} setValue={setValue} maxNumberCol1={59} maxNumberCol2={59} maxNumberCol3={99} elementId="myNumberSwiper"/>
+            </div>
+
+            <button onClick={() => {
+                dispatch(setTimer(value))
+                dispatch(setActive(true))
+            }} className={"text-xl mt-3 w-full h-full"}>Start</button>
         </div>
     );
 }

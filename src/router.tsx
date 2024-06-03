@@ -2,9 +2,8 @@ import {createBrowserRouter, redirect} from "react-router-dom";
 
 import Dashboard from "@/routes/dashboard/Dashboard";
 import Calendar from "@/routes/calendar/Calendar";
-import MusicLayout from "@/routes/music/MusicLayout";
+import Radio from "@/routes/music/Radio";
 import Weather from "@/routes/weather/Weather";
-import Settings from "@/routes/settings/Settings";
 import Notifications from "@/routes/notifications/Notifications";
 import Setup from "@/routes/setup/Setup";
 import DefaultLayout from "@/components/layouts/Default";
@@ -117,7 +116,7 @@ export default createBrowserRouter([
             },
             {
                 path: "app/music",
-                element: <MusicLayout/>,
+                element: <Radio/>,
             },
             {
                 path: "app/device-control",
