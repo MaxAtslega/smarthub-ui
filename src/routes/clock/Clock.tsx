@@ -1,5 +1,7 @@
 import Map from "@/assets/map.svg";
 import React, { useEffect, useState } from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store";
 
 // Utility function to format time with leading zeros
 const formatTime = (date: Date) => {
@@ -24,6 +26,10 @@ function Clock() {
         return () => clearInterval(intervalId);
     }, []);
 
+    const dateOptions: Intl.DateTimeFormatOptions = { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' };
+    const dateFormatter = new Intl.DateTimeFormat('en-US', dateOptions);
+    const dateAsFormattedString = dateFormatter.format(date);
+
     return (
         <>
             <div className={"w-full flex flex-col"}>
@@ -40,8 +46,10 @@ function Clock() {
                     <span>{getTimeInTimeZone(1).hours}:{getTimeInTimeZone(1).minutes}</span>
                 </div>
             </div>
-            <div className={"w-full h-full flex items-center"}>
-                <img width={300} src={Map} />
+            <div className={"w-full h-full flex items-center justify-center flex-col"}>
+                <img width={200} src={Map}  alt={"World"}/>
+                <span className={"text-3xl font-bold mt-3"}>{getTimeInTimeZone(0).hours}:{getTimeInTimeZone(0).minutes}</span>
+                <span className={"text-xl"}>{dateAsFormattedString}</span>
             </div>
             <div className={"w-full flex flex-col"}>
                 <div className={"flex justify-between mt-auto mb-auto"}>

@@ -11,7 +11,7 @@ function ClockLayout() {
                 <NavItem name={"Alarm"} to={"alarm"} />
             </div>
 
-            <div className={"min-h-[270px] bg-background-secondary rounded p-4 flex justify-between"}>
+            <div className={"min-h-[270px] bg-background-secondary rounded p-4 flex justify-between overflow-auto"}>
                 <Outlet />
             </div>
         </div>
