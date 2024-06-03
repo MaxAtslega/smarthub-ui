@@ -1,152 +1,222 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import bow from "@/assets/weather/bow.png";
-import {FiSunrise, FiSunset} from "react-icons/fi";
-import {FaCloudRain, FaWind} from "react-icons/fa";
+import { FiSunrise, FiSunset } from "react-icons/fi";
+import {
+    FaCloudRain,
+    FaWind,
+    FaTint,
+    FaThermometerThreeQuarters,
+    FaEye,
+    FaCloudSun,
+    FaSun,
+    FaSnowflake,
+    FaSmog,
+    FaCloud, FaBolt
+} from "react-icons/fa";
+import { useGetConstantsByUserIdQuery } from "@/api/constants.api";
+import { selectCurrentUser } from "@/slices/user.slice";
+import { useGetForecastByCoordinatesQuery, useGetWeatherByCoordinatesQuery } from "@/api/weather.api";
 
-//Replace later with API
-const city = "Lage, DE"
-const stforecast = "Bewölkt"
-const rainprobability = "1% das es gegen 09:00 Uhr regnet"
-const temperaturelocation = "3°"
-const feelslike = "Fühlt sich an wie 10 °C"
-const am = "06:39am"
-const pm = "08:46pm"
-const forecastmorning = "10 °C"
-const forecastafternoon = "11 °C"
-const forecastevening = "8 °C"
-const forecastovernight = "3 °C"
-const windspeed = "24km/h"
-const dewpoint = "0 °C"
-const uvindex = "4"
-const humidty = "61%"
-const pressure = "1.001"
-const visibility = "22"
+const Weather = () => {
+    const currentUser = useSelector(selectCurrentUser);
+    const [lat, setLat] = useState(null);
+    const [lon, setLon] = useState(null);
+    const [city, setCity] = useState<string | null>(null);
 
-function Weather() {
+    const { data: constants } = useGetConstantsByUserIdQuery(currentUser?.id ?? 0);
+
+    const { data: weatherData } = useGetWeatherByCoordinatesQuery(
+        lat && lon ? { lat, lon } : { lat: "33.44", lon: "-94.04" },
+        {
+            skip: lat === null || lon === null
+        }
+    );
+
+    const { data: forecastData } = useGetForecastByCoordinatesQuery(
+        lat && lon ? { lat, lon } : { lat: "33.44", lon: "-94.04" },
+        {
+            skip: lat === null || lon === null
+        }
+    );
+
+    useEffect(() => {
+        if (constants) {
+            const locationConstant = constants.find(c => c.name === 'LOCATION');
+            if (locationConstant) {
+                const location = JSON.parse(locationConstant.value);
+                setLat(location.lat);
+                setLon(location.lon);
+                setCity((location.name + ", " + location.country));
+            }
+        }
+    }, [constants]);
+
+    if (!weatherData || !forecastData){
+        return (
+            <div className="flex justify-between bg-background-secondary p-4 h-full">
+                Loading...
+            </div>
+        );
+    }
+
+
+    const stforecast = weatherData.current.weather[0].description;
+    const temperaturelocation = `${Math.round(weatherData.current.temp - 273.15)}°C`;
+    const feelslike = `Fühlt sich an wie ${Math.round(weatherData.current.feels_like - 273.15)}°C`;
+    const sunriseTime = new Date(weatherData.current.sunrise * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    const sunsetTime = new Date(weatherData.current.sunset * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    const windspeed = `${weatherData.current.wind_speed} km/h`;
+    const dewpoint = `${Math.round(weatherData.current.dew_point - 273.15)} °C`;
+    const uvindex = weatherData.current.uvi;
+    const humidty = `${weatherData.current.humidity}%`;
+    const pressure = `${weatherData.current.pressure} hPA`;
+    const visibility = `${weatherData.current.visibility / 1000} km`;
+
+    const forecastIntervals = forecastData.list.slice(0, 3).map((interval: any, index: any) => ({
+        time: new Date(interval.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        temperature: `${Math.round(interval.main.temp - 273.15)} °C`,
+        weather: interval.weather[0].description,
+        icon: interval.weather[0].icon
+    }));
+
+    const getWeatherIcon = (icon: string) => {
+        switch (icon) {
+            case '01d':
+            case '01n':
+                return <FaSun className="text-yellow-500" />;
+            case '02d':
+            case '02n':
+                return <FaCloudSun className="text-yellow-500" />;
+            case '03d':
+            case '03n':
+            case '04d':
+            case '04n':
+                return <FaCloud className="text-gray-500" />;
+            case '09d':
+            case '09n':
+                return <FaCloudRain className="text-gray-500" />;
+            case '10d':
+            case '10n':
+                return <FaCloudSun className="text-blue-500" />;
+            case '11d':
+            case '11n':
+                return <FaBolt className="text-yellow-500" />;
+            case '13d':
+            case '13n':
+                return <FaSnowflake className="text-blue-500" />;
+            case '50d':
+            case '50n':
+                return <FaSmog className="text-gray-500" />;
+            default:
+                return <FaCloud className="text-gray-500" />;
+        }
+    };
+
     return (
-        <div className="flex justify-between bg-background-secondary p-4 h-full">
-            <div className={"w-[50%]"}>
-                <div className={"flex flex-col h-full"}>
+        <div className="flex justify-between bg-background-secondary p-4 h-full rounded">
+            <div className="w-[50%]">
+                <div className="flex flex-col h-full">
                     <div className="pb-2 border-solid border-0 border-b border-b-background-primary">
                         <span className="font-black">{city}</span>
                     </div>
-                    <div className={"pt-2"}>
+                    <div className="pt-2">
                         <span className="st-forecast font-black">{stforecast}</span>
-                        <div className="text-sm opacity-60">{rainprobability}</div>
                     </div>
-
-                    <div className={"pt-5 mt-auto"}>
-                        <div className={"flex justify-between items-end"}>
-                            <div className={"pt-1"}>
+                    <div className="pt-5 mt-auto">
+                        <div className="flex justify-between items-end">
+                            <div className="pt-1">
                                 <span className="block font-bold text-2xl">{temperaturelocation}</span>
                                 <span className="font-bold">{feelslike}</span>
                             </div>
-                            <div className={""}>
-                                <div className={"w-full"}>
-                                    <img className="ml-7 w-[120px] h-[30px] mt-3" src={bow}></img>
+                            <div>
+                                <div className="w-full">
+                                    <img className="ml-4 w-[120px] h-[30px] mt-3" src={bow} alt="bow"></img>
                                 </div>
-                                <div className={"flex justify-between w-full"}>
-                                <div>
-                                        <FiSunrise className={"text-[#]"}/>
-                                        <span className={"pl-2"}>{am}</span>
+                                <div className="flex justify-between w-full">
+                                    <div>
+                                        <FiSunrise className="text-[#FF7E5F]"/>
+                                        <span className="pl-2">{sunriseTime}</span>
                                     </div>
-                                    <div className={"ml-5"}>
-                                        <FiSunset/>
-                                        <span className={"pl-2"}>{pm}</span>
+                                    <div className="ml-5">
+                                        <FiSunset className="text-[#597287]"/>
+                                        <span className="pl-2">{sunsetTime}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className={"pt-4 flex justify-between"}>
-                        <div className={"w-full"}>
-                            <div
-                                className={"pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                    <div className="pt-4 flex justify-between">
+                        <div className="w-full">
+                            <div className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"} />
+                                    <FaWind className="mr-2 text-blue-500"/>
                                     <span>Wind</span>
                                 </div>
                                 <span>{windspeed}</span>
                             </div>
-                            <div className={"pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"} />
+                                    <FaTint className="mr-2 text-blue-500"/>
                                     <span>Dew Point</span>
                                 </div>
                                 <span>{dewpoint}</span>
                             </div>
-                            <div className={"pt-3 pb-1  flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"} />
+                                    <FaThermometerThreeQuarters className="mr-2 text-yellow-500"/>
                                     <span>UV-Index</span>
                                 </div>
                                 <span>{uvindex}/10</span>
                             </div>
                         </div>
 
-                        <div className={"pl-5 w-full"}>
-                            <div
-                                className={"pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                        <div className="pl-5 w-full">
+                            <div className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"}/>
+                                    <FaTint className="mr-2 text-blue-500"/>
                                     <span>Humidty</span>
                                 </div>
                                 <span>{humidty}</span>
                             </div>
-                            <div
-                                className={"pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"}/>
+                                    <FaCloudSun className="mr-2 text-red-500"/>
                                     <span>Pressure</span>
                                 </div>
-                                <span>{pressure}hPA</span>
+                                <span>{pressure}</span>
                             </div>
-                            <div
-                                className={"pt-3 pb-1  flex justify-between border-solid border-0 border-b border-b-background-primary"}>
+                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                 <div>
-                                    <FaWind className={"mr-2"}/>
+                                    <FaEye className="mr-2 text-green-500"/>
                                     <span>Visibility</span>
                                 </div>
-                                <span>{visibility}km</span>
+                                <span>{visibility}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div className={"w-[50%] pl-4 flex flex-col"}>
-                <div className={"text-[160px] w-full flex justify-center"}>
-                    <FaCloudRain />
+            <div className="w-[50%] pl-4 flex flex-col">
+                <div className="text-[160px] w-full flex justify-center">
+                    {getWeatherIcon(weatherData.current.weather[0].icon)}
                 </div>
-
-                <div className={"w-full flex mt-auto"}>
-                    <div className={"text-center w-full flex flex-col items-center"}>
-                        <span className={"mb-4"}>Morgens</span>
-                        <FaCloudRain className={"mb-4 text-4xl"}/>
-                        <span>10</span>
-                    </div>
-                    <div className={"text-center w-full flex flex-col items-center"}>
-                        <span className={"mb-4"}>Mittags</span>
-                        <FaCloudRain className={"mb-4 text-4xl"}/>
-                        <span>10</span>
-                    </div>
-                    <div className={"text-center w-full flex flex-col items-center"}>
-                        <span className={"mb-4"}>Abends</span>
-                        <FaCloudRain className={"mb-4 text-4xl"}/>
-                        <span>10</span>
-                    </div>
-
-                    <div className={"text-center w-full flex flex-col items-center"}>
-                        <span className={"mb-4"}>Nachts</span>
-                        <FaCloudRain className={"mb-4 text-4xl"}/>
-                        <span>10</span>
-                    </div>
+                <div className="w-full flex mt-auto">
+                    {forecastIntervals.map((interval: any, index: any) => (
+                        <div key={index} className="text-center w-full flex flex-col items-center">
+                            <span className="mb-4">{interval.time}</span>
+                            <div className="mb-4 text-5xl">
+                                {getWeatherIcon(interval.icon)}
+                            </div>
+                            <span>{interval.temperature}</span>
+                            <span>{interval.weather}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Weather
+export default Weather;

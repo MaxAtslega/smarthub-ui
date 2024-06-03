@@ -13,10 +13,13 @@ export const weatherApi = createApi({
             query: ({ city, state, country, limit = 5 }) =>
                 `geo/1.0/direct?q=${city}${state ? `,${state}` : ''},${country}&limit=${limit}&appid=${OPEN_WEATHER_API_KEY}`,
         }),
+        getForecastByCoordinates: builder.query({
+            query: ({ lat, lon }) => `data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPEN_WEATHER_API_KEY}`,
+        }),
     }),
 });
 
 
 
 
-export const { useGetWeatherByCoordinatesQuery, useGetWeatherByCityQuery  } = weatherApi;
+export const { useGetWeatherByCoordinatesQuery, useGetForecastByCoordinatesQuery, useGetWeatherByCityQuery  } = weatherApi;
