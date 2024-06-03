@@ -1,0 +1,33 @@
+#alarm input[type="checkbox"] {
+    display: none;
+}
+
+#alarm label {
+    position: relative;
+    color: #4189e0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8em;
+    border: 1px solid #4189e0;
+    padding: .1rem .4rem;
+    border-radius: 0.5em;
+}
+
+#alarm label:before {
+    content: "";
+    height: .9em;
+    width: .9em;
+    border: 1px solid #4189e0;
+    border-radius: 50%;
+}
+#alarm input[type="checkbox"]:checked + label:before {
+    height: .9em;
+    width: .9em;
+    border: 5px solid #ffffff;
+    background-color: #4189e0;
+}
+#alarm input[type="checkbox"]:checked + label {
+    background-color: #4189e0;
+    color: #ffffff;
+}
