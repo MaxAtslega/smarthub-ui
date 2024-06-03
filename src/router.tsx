@@ -2,12 +2,12 @@ import {createBrowserRouter, redirect} from "react-router-dom";
 
 import Dashboard from "@/routes/dashboard/Dashboard";
 import Calendar from "@/routes/calendar/Calendar";
-import Music from "@/routes/music/Music";
+import MusicLayout from "@/routes/music/MusicLayout";
 import Weather from "@/routes/weather/Weather";
 import Settings from "@/routes/settings/Settings";
 import Notifications from "@/routes/notifications/Notifications";
 import Setup from "@/routes/setup/Setup";
-import Layout from "@/components/Layout";
+import DefaultLayout from "@/components/layouts/Default";
 import DeviceControl from "@/routes/deviceControl/DeviceControl";
 import React from "react";
 import General from "@/routes/settings/General";
@@ -18,7 +18,7 @@ import ClockLayout from "@/routes/clock/ClockLayout";
 import Login from "@/routes/login/Login";
 import CreateProfile from "@/routes/profile/CreateProfile";
 import Splash from "@/routes/splash/Splash";
-import SetupLayout from "@/components/SetupLayout";
+import SetupLayout from "@/components/layouts/SetupLayout";
 import Network from "@/routes/setup/Network";
 import ConnectWifi from "@/routes/setup/ConnectWifi";
 import Location from "@/routes/setup/Location";
@@ -27,6 +27,41 @@ import Customize from "@/routes/settings/Customize";
 import Clock from "@/routes/clock/Clock";
 import Timer from "@/routes/clock/Timer";
 import Alarm from "@/routes/clock/Alarm";
+import AddAlarm from "@/routes/clock/AddAlarm";
+import BoxLayout, {NavigationBoxItems} from "@/components/layouts/BoxLayout";
+import {FaCogs} from "react-icons/fa";
+import {BsWifi} from "react-icons/bs";
+import {IoMdBluetooth} from "react-icons/io";
+import {RiRfidFill} from "react-icons/ri";
+import {BiSolidCustomize} from "react-icons/bi";
+import {LuUsers} from "react-icons/lu";
+
+const settingsUrls: NavigationBoxItems[] = [
+    {
+        to: "/system/settings/general",
+        icon: <FaCogs/>
+    },
+    {
+        to: "/system/settings/network",
+        icon: <BsWifi/>
+    },
+    {
+        to: "/system/settings/bluetooth",
+        icon: <IoMdBluetooth/>
+    },
+    {
+        to: "/system/settings/actions",
+        icon: <RiRfidFill/>
+    },
+    {
+        to: "/system/settings/customize",
+        icon: <BiSolidCustomize/>
+    },
+    {
+        to: "/system/settings/accounts",
+        icon: <LuUsers/>
+    }
+]
 
 export default createBrowserRouter([
     {
@@ -70,7 +105,7 @@ export default createBrowserRouter([
         ]
     },
     {
-        element: <Layout/>,
+        element: <DefaultLayout />,
         children: [
             {
                 path: "app/dashboard",
@@ -82,7 +117,7 @@ export default createBrowserRouter([
             },
             {
                 path: "app/music",
-                element: <Music/>,
+                element: <MusicLayout/>,
             },
             {
                 path: "app/device-control",
@@ -101,6 +136,10 @@ export default createBrowserRouter([
                         element: <Alarm/>,
                     },
                     {
+                        path: "alarm/add",
+                        element: <AddAlarm />,
+                    },
+                    {
                         path: "timer",
                         element: <Timer/>,
                     },
@@ -116,7 +155,7 @@ export default createBrowserRouter([
             },
             {
                 path: "system/settings/",
-                element: <Settings/>,
+                element: <BoxLayout boxes={settingsUrls}/>,
                 children: [
                     {
                         path: "general",

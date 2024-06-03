@@ -8,7 +8,7 @@ import {selectDisplayStatus} from "@/slices/display.slice";
 import {useGetConstantsByUserIdQuery} from "@/api/constants.api";
 import Keyboard from "@/components/shared/Keyboard";
 
-export default function Layout() {
+export default function Default() {
     const currentUser = useSelector(selectCurrentUser);
     const [keyboardVisibility, setKeyboardVisibility] = useState(false);
     const isDisplayOn = useSelector(selectDisplayStatus);
