@@ -1,4 +1,4 @@
-function Music() {
+function Radio() {
     return (
         <div>
             <h1>Music</h1>
@@ -6,4 +6,4 @@ function Music() {
     )
 }
 
-export default Music
+export default Radio
