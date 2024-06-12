@@ -44,8 +44,6 @@ const Keyboard = ({visibility, setVisibility}: {visibility: boolean, setVisibili
 
     const onChange = (input: string) => {
         if (focusedInput) {
-            focusedInput.value = input;
-
             const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
                 window.HTMLInputElement.prototype,
                 "value"

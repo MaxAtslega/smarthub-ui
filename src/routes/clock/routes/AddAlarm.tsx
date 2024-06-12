@@ -1,5 +1,5 @@
 import React, {ForwardedRef, forwardRef, useEffect, useState} from "react";
-import NumberSwiper from "@/components/NumberSwiper";
+import NumberSwiper from "@/components/shared/NumberSwiper";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {SlCalender} from "react-icons/sl";
@@ -7,7 +7,7 @@ import {useGetConstantsByUserIdQuery, usePostConstantMutation, usePutConstantMut
 import {useSelector} from "react-redux";
 import {selectCurrentUser} from "@/slices/user.slice";
 import {Navigate, useNavigate} from "react-router-dom";
-import TimeSwiper from "@/components/TimeSwiper";
+import TimeSwiper from "@/components/shared/TimeSwiper";
 import './addAlarm.style.css';
 
 interface CustomInputProps {
@@ -19,7 +19,7 @@ function AddAlarm () {
     const [value, setValue] = useState<string>("00:00");
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
-    const [alarms, setAlarms] = useState<any[]>([]);
+    const [alarms, setAlarms] = useState<any[] | undefined>([]);
     const currentUser = useSelector(selectCurrentUser);
     const navigate = useNavigate();
 
@@ -32,6 +32,8 @@ function AddAlarm () {
             const alarmConstant = constants.find(c => c.name === "ALARM");
             if (alarmConstant) {
                 setAlarms(JSON.parse(alarmConstant.value));
+            } else {
+                setAlarms(undefined)
             }
         }
     }, [constants]);
@@ -71,23 +73,28 @@ function AddAlarm () {
             weekdays: selectedWeekdays
         };
 
-        const updatedAlarms = [...alarms, newAlarm];
-
         try {
-            if (alarms.length === 0) {
+            if (alarms == undefined) {
+                const updatedAlarms = [newAlarm];
+
                 await postConstant({
                     name: 'ALARM',
                     user_id: currentUser?.id || 0,
                     value: JSON.stringify(updatedAlarms)
                 }).unwrap();
+
+                setAlarms(updatedAlarms);
             } else {
+                const updatedAlarms = [...alarms, newAlarm];
+
                 await putConstant({
                     userId: currentUser?.id || 0,
                     constantName: 'ALARM',
                     newValue: JSON.stringify(updatedAlarms)
                 }).unwrap();
+
+                setAlarms(updatedAlarms);
             }
-            setAlarms(updatedAlarms);
 
             navigate("/app/clock/alarm")
         } catch (error) {
@@ -116,7 +123,7 @@ function AddAlarm () {
                     </div>
 
                     <div className={"flex flex-wrap gap-2 my-4"}>
-                        {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(day => (
+                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                             <div key={day}>
                                 <input
                                     type="checkbox"

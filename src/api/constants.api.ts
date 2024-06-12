@@ -1,5 +1,4 @@
 import {commonApi} from "@/store/common.api";
-import User from "@/models/User";
 import Constant from "@/models/Constant";
 
 export const usersApi = commonApi.injectEndpoints({

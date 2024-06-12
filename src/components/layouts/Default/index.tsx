@@ -7,6 +7,8 @@ import { selectCurrentUser } from "@/slices/user.slice";
 import {selectDisplayStatus} from "@/slices/display.slice";
 import {useGetConstantsByUserIdQuery} from "@/api/constants.api";
 import Keyboard from "@/components/shared/Keyboard";
+import {AudioProvider} from "@/contexts/AudioPlayerContext";
+import {SpotifyProvider} from "@/contexts/SpotifyContext";
 
 export default function Default() {
     const currentUser = useSelector(selectCurrentUser);
@@ -33,23 +35,25 @@ export default function Default() {
     if (error) return <Navigate replace to="/login" />;
 
     return (
-        <>
-            <Header />
-            <main
-                className={`fixed top-[46px] left-0 w-full ${
-                    keyboardVisibility ? "h-[213px]" : "h-[360px]"
-                }`}
-            >
-                <div className={"h-full w-full overflow-x-hidden overflow-y-auto"}>
-                    <div className={"mx-3 h-full"}>
-                        <Outlet />
+        <SpotifyProvider>
+            <AudioProvider>
+                <Header />
+                <main
+                    className={`fixed top-[46px] left-0 w-full ${
+                        keyboardVisibility ? "h-[213px]" : "h-[360px]"
+                    }`}
+                >
+                    <div className={"h-full w-full overflow-x-hidden overflow-y-auto"}>
+                        <div className={"mx-3 h-full"}>
+                            <Outlet />
+                        </div>
                     </div>
-                </div>
 
-                <Keyboard visibility={keyboardVisibility} setVisibility={setKeyboardVisibility}/>
+                    <Keyboard visibility={keyboardVisibility} setVisibility={setKeyboardVisibility}/>
 
-                {!keyboardVisibility && <Navigator />}
-            </main>
-        </>
+                    {!keyboardVisibility && <Navigator />}
+                </main>
+            </AudioProvider>
+        </SpotifyProvider>
     );
 }

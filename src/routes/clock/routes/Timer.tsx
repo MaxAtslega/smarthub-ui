@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import NumberSwiper from "@/components/NumberSwiper";
+import NumberSwiper from "@/components/shared/NumberSwiper";
 import {useDispatch, useSelector} from "react-redux";
 import {setActive, setTimer} from "@/slices/timer.slice";
 import {RootState} from "@/store";

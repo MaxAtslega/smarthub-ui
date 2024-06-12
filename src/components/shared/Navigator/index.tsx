@@ -12,15 +12,15 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import useLongPress from "@/utils/useLongPress";
 import "./navigator.css"
 import {LuClock} from "react-icons/lu";
-import {BsWifi} from "react-icons/bs";
-import {FaEthernet, FaWifi} from "react-icons/fa";
+import {FaEthernet} from "react-icons/fa";
 import {IoWifiSharp} from "react-icons/io5";
 import {webSocketService} from "@/services/webSocketService";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getEthernetInterface, getWlanInterface} from "@/slices/network.slice";
 import {useTranslation} from "react-i18next";
 import {getDevices, startDiscovering, stopDiscovering} from "@/utils/bluetooth";
 import {RootState} from "@/store";
+import {selectVolumeLevel, setVolumeLevel} from "@/slices/volume.slice";
 
 const Navigator = () => {
     return (
@@ -31,7 +31,6 @@ const Navigator = () => {
                 <NavigatorItem to={"/app/music"}><IoMdMusicalNotes/></NavigatorItem>
                 <NavigatorItem to={"/app/weather"}><TiWeatherCloudy/></NavigatorItem>
                 <NavigatorItem to={"/app/clock"}><LuClock/></NavigatorItem>
-                <NavigatorItem to={"/app/device-control"}><MdHome/></NavigatorItem>
                 <NavigatorItem to={"/system/settings/"}><MdSettings/></NavigatorItem>
                 <NavigatorSpace />
                 <WifiItem />
@@ -69,16 +68,17 @@ const NavigatorSpace = () =>  {
 }
 
 const VolumeControlItem = () =>  {
-    const [volume, setVolume] = useState(100);
     const [volumePopupOpen, setVolumePopupOpen] = useState(false);
     const volumePopupRef = useRef<HTMLDivElement>(null);
+    const volumeLevel = useSelector(selectVolumeLevel);
+    const dispatch = useDispatch();
 
     const onLongPress = () => {
         setVolumePopupOpen(!volumePopupOpen);
     };
 
     const onClick = () => {
-        setVolume(volume === 0 ? 100 : 0);
+        dispatch(setVolumeLevel(volumeLevel === 0 ? 1 : 0));
     };
 
     const defaultOptions = {
@@ -108,14 +108,14 @@ const VolumeControlItem = () =>  {
         text-xl ${volumePopupOpen ? "bg-primary-100" : "bg-background-secondary"} mr-3 rounded`}>
           <div {...longPressEvent} className={`cursor-pointer h-[48px] w-[48px] flex items-center justify-center 
         text-xl rounded`}>
-              {volume == 0 ? <MdVolumeOff/> : volume < 35 ? <MdVolumeMute/> : volume < 75 ? <MdVolumeDown/> :
+              {volumeLevel == 0 ? <MdVolumeOff/> : volumeLevel < 0.35 ? <MdVolumeMute/> : volumeLevel < 0.75 ? <MdVolumeDown/> :
                 <MdVolumeUp/>}
           </div>
           {volumePopupOpen ?
             <div className={"absolute bottom-[80px] h-[200px] w-[50px] bg-background-third rounded"}>
                 <span className={"absolute top-1 left-[18px]"}>+</span>
-                <input className="-rotate-90 absolute top-24 -right-[45px] bottom-14 w-[136px]" type="range" step="1"
-                       value={volume} min="0" max="100" onChange={(event) => setVolume(parseInt(event.target.value))}/>
+                <input className="-rotate-90 absolute top-16 -right-[45px] bottom-14 w-[136px] p-0" type="range" step="1"
+                       value={volumeLevel*100} min="0" max="100" onChange={(event) => dispatch(setVolumeLevel(parseInt(event.target.value)/100))}/>
                 <span className={"absolute bottom-1 left-[21px]"}>-</span>
             </div> : null}
       </div>
@@ -174,16 +174,13 @@ const WifiItem = () => {
     };
     const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
 
-    let connectionStatus = null;
-    let icon = <FaEthernet  />;
+    let icon = <IoWifiSharp  />;
     let bgColor = "bg-background-secondary";
 
     if (ethernetInterface && ethernetInterface.addr.length > 0) {
-        connectionStatus = 'ethernet';
         icon = <FaEthernet  />;
         bgColor = "bg-primary-100";
     } else if (wlanInterface && wlanInterface.addr.length > 0) {
-        connectionStatus = 'wifi';
         icon = <IoWifiSharp />;
         bgColor = "bg-blue-500";
     }

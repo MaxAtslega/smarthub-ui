@@ -21,7 +21,7 @@ const TimeSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue, m
             const column = i + 1;
             const number = getNumber(column, 'active');
             if(number && number.innerText != digit){
-                getNumber(column, digit)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                getNumber(column, digit)?.scrollIntoView({ behavior: 'instant', block: 'center' });
             }
         });
     }, [timer]);
@@ -50,7 +50,9 @@ const TimeSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue, m
 
                         if (target.classList.contains('last-zero')) {
                             if (swiperElement) {
-                                swiperElement.querySelector(`#center-${column}`)?.scrollIntoView();
+                                swiperElement.querySelector(`#center-${column}`)?.scrollIntoView({
+                                    behavior: 'instant', block: 'center'
+                                });
                             }
                         }
 
@@ -58,10 +60,10 @@ const TimeSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue, m
 
                         let total = '';
                         swiperElement.querySelectorAll('.number-swiper-column').forEach((col) => {
-                            total += ":"+(col as HTMLElement).dataset.value;
+                            total += ":"+(col as HTMLElement).dataset.value?.toString().padStart(2, "0");
                         });
 
-                        setValue(total.slice(1, total.length-1));
+                        setValue(total.slice(1, total.length));
                     }
                 });
             },
@@ -119,7 +121,7 @@ const TimeSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue, m
         if (newElement) {
             setTimeout(() => {
                 if (newElement) {
-                    newElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    newElement.scrollIntoView({ behavior: 'instant', block: 'center' });
                 }
             }, 1000);
         }
@@ -158,7 +160,7 @@ const TimeSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue, m
     return (
         <div id={elementId} className="flex justify-center items-center" ref={swiperRef}>
             {renderColumn(2, maxNumberCol2, "")}
-            <span className={"mt-[3.5rem]"}>:</span>
+            <span>:</span>
             {renderColumn(1, maxNumberCol1, "")}
         </div>
     );

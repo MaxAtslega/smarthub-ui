@@ -40,75 +40,81 @@ function Bluetooth() {
     }, []);
 
   return (
-      <div>
-          <h1>Bluetooth</h1>
-          <div className="flex gap-2 mt-4 mb-4">
-              <button onClick={startDiscovering} disabled={discovering}>Start Scanning</button>
-              <button onClick={stopDiscovering} disabled={!discovering}>Stop Scanning</button>
-          </div>
-
-          {devices.filter(device => device.paired).length > 0 ?
-              <span className={"text-sm ml-2 opacity-80"}>{t('bluetooth.pairedDevices', 'Paired Devices')}</span> : null}
-          <div className={"mb-4"}>
-              {devices.filter(device => device.paired).map((device: BluetoothDevice) => (
-                  <div key={device.address} className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
-                      <span className={device.connected ? "text-primary-100" : ""}>{device.name}</span>
-
-                      <div className="flex gap-2">
-                          {
-                              device.connected ?
-                                  <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
-                                      Disconnect
-                                  </button> :
-                                  <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
-                                      Connect
-                                  </button>
-                          }
-
-                          {
-                              device.trusted ?
-                                  <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
-                                      Untrust
-                                  </button> :
-                                  <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
-                                      Trust
-                                  </button>
-                          }
-                      </div>
-                  </div>
-              ))}
-          </div>
-
-          <span className={"text-sm ml-2 opacity-80"}>{t('bluetooth.availableDevices', 'Available Devices')}</span>
+      <div className={"bg-background-secondary h-full w-full rounded overflow-auto p-2"}>
           <div>
-              {devices.filter(device => !device.paired).map((device: BluetoothDevice) => (
-                  <div key={device.address}
-                       className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
-                      <span>{device.name}</span>
+              <h1>Bluetooth</h1>
+              <div className="flex gap-2 mt-4 mb-4">
+                  <button onClick={startDiscovering} disabled={discovering}>Start Scanning</button>
+                  <button onClick={stopDiscovering} disabled={!discovering}>Stop Scanning</button>
+              </div>
 
-                      <div className="flex gap-2">
-                          {
-                              device.connected ?
-                                  <button onClick={() => handleDisconnect(device.address)} disabled={!device.connected}>
-                                      Disconnect
-                                  </button> :
-                                  <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
-                                      Connect
-                                  </button>
-                          }
+              {devices.filter(device => device.paired).length > 0 ?
+                  <span
+                      className={"text-sm ml-2 opacity-80"}>{t('bluetooth.pairedDevices', 'Paired Devices')}</span> : null}
+              <div className={"mb-4"}>
+                  {devices.filter(device => device.paired).map((device: BluetoothDevice) => (
+                      <div key={device.address}
+                           className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
+                          <span className={device.connected ? "text-primary-100" : ""}>{device.name}</span>
 
-                          {
-                              device.trusted ?
-                                  <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
-                                      Untrust
-                                  </button> :
-                                  <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
-                                      Trust
-                                  </button>
-                          }
+                          <div className="flex gap-2">
+                              {
+                                  device.connected ?
+                                      <button onClick={() => handleDisconnect(device.address)}
+                                              disabled={!device.connected}>
+                                          Disconnect
+                                      </button> :
+                                      <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
+                                          Connect
+                                      </button>
+                              }
+
+                              {
+                                  device.trusted ?
+                                      <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
+                                          Untrust
+                                      </button> :
+                                      <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
+                                          Trust
+                                      </button>
+                              }
+                          </div>
                       </div>
-                  </div>
-              ))}
+                  ))}
+              </div>
+
+              <span className={"text-sm ml-2 opacity-80"}>{t('bluetooth.availableDevices', 'Available Devices')}</span>
+              <div>
+                  {devices.filter(device => !device.paired).map((device: BluetoothDevice) => (
+                      <div key={device.address}
+                           className="mb-2 flex bg-background-third rounded mx-2 px-3 py-2 items-center justify-between">
+                          <span>{device.name}</span>
+
+                          <div className="flex gap-2">
+                              {
+                                  device.connected ?
+                                      <button onClick={() => handleDisconnect(device.address)}
+                                              disabled={!device.connected}>
+                                          Disconnect
+                                      </button> :
+                                      <button onClick={() => handleConnect(device.address)} disabled={device.connected}>
+                                          Connect
+                                      </button>
+                              }
+
+                              {
+                                  device.trusted ?
+                                      <button onClick={() => handleUntrust(device.address)} disabled={!device.trusted}>
+                                          Untrust
+                                      </button> :
+                                      <button onClick={() => handleTrust(device.address)} disabled={device.trusted}>
+                                          Trust
+                                      </button>
+                              }
+                          </div>
+                      </div>
+                  ))}
+              </div>
           </div>
       </div>
   )

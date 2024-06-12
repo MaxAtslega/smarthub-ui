@@ -17,11 +17,16 @@
     "@coreui/coreui": "^5.0.1",
     "@coreui/react": "^5.0.0",
     "@reduxjs/toolkit": "^2.0.1",
+    "@spotify/web-api-ts-sdk": "^1.2.0",
+    "@types/axios": "^0.14.0",
+    "axios": "^1.7.2",
     "i18next": "^23.11.4",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
+    "qrcode.react": "^3.1.0",
     "react-big-calendar": "^1.12.2",
     "react-datepicker": "^6.9.0",
+    "react-h5-audio-player": "^3.9.1",
     "react-i18next": "^14.1.1",
     "react-mobile-datepicker": "^4.0.2",
     "react-redux": "^9.0.4",
@@ -31,7 +36,8 @@
     "react-weblineindia-time-picker": "^1.0.3",
     "simple-keyboard-layouts": "^3.3.103",
     "socket.io-client": "^4.7.3",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "spotify-web-api-js": "^1.5.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.37.1",

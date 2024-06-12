@@ -114,108 +114,114 @@ const Weather = () => {
     };
 
     return (
-        <div className="flex justify-between bg-background-secondary p-4 h-full rounded">
-            <div className="w-[50%]">
-                <div className="flex flex-col h-full">
-                    <div className="pb-2 border-solid border-0 border-b border-b-background-primary">
-                        <span className="font-black">{city}</span>
-                    </div>
-                    <div className="pt-2">
-                        <span className="st-forecast font-black">{stforecast}</span>
-                    </div>
-                    <div className="pt-5 mt-auto">
-                        <div className="flex justify-between items-end">
-                            <div className="pt-1">
-                                <span className="block font-bold text-2xl">{temperaturelocation}</span>
-                                <span className="font-bold">{feelslike}</span>
-                            </div>
-                            <div>
-                                <div className="w-full">
-                                    <img className="ml-4 w-[120px] h-[30px] mt-3" src={bow} alt="bow"></img>
+            <div className="flex justify-between bg-background-secondary p-4 h-full rounded">
+                <div className="w-[60%]">
+                    <div className="flex flex-col h-full">
+                        <div className="pb-2 border-solid border-0 border-b border-b-background-primary">
+                            <span className="font-black">{city}</span>
+                        </div>
+                        <div className="pt-2">
+                            <span className="st-forecast font-black">{stforecast}</span>
+                        </div>
+                        <div className="pt-5 mt-auto">
+                            <div className="flex justify-between items-end">
+                                <div className="pt-1">
+                                    <span className="block font-bold text-2xl">{temperaturelocation}</span>
+                                    <span className="font-bold">{feelslike}</span>
                                 </div>
-                                <div className="flex justify-between w-full">
+                                <div>
+                                    <div className="w-full">
+                                        <img className="ml-4 w-[120px] h-[30px] mt-3" src={bow} alt="bow"></img>
+                                    </div>
+                                    <div className="flex justify-between w-full">
+                                        <div>
+                                            <FiSunrise className="text-[#FF7E5F]"/>
+                                            <span className="pl-2">{sunriseTime}</span>
+                                        </div>
+                                        <div className="ml-5">
+                                            <FiSunset className="text-[#597287]"/>
+                                            <span className="pl-2">{sunsetTime}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="pt-4 flex justify-between">
+                            <div className="w-full">
+                                <div
+                                    className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
                                     <div>
-                                        <FiSunrise className="text-[#FF7E5F]"/>
-                                        <span className="pl-2">{sunriseTime}</span>
+                                        <FaWind className="mr-2 text-blue-500"/>
+                                        <span>Wind</span>
                                     </div>
-                                    <div className="ml-5">
-                                        <FiSunset className="text-[#597287]"/>
-                                        <span className="pl-2">{sunsetTime}</span>
+                                    <span>{windspeed}</span>
+                                </div>
+                                <div
+                                    className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
+                                    <div>
+                                        <FaTint className="mr-2 text-blue-500"/>
+                                        <span>Dew Point</span>
                                     </div>
+                                    <span>{dewpoint}</span>
+                                </div>
+                                <div
+                                    className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
+                                    <div>
+                                        <FaThermometerThreeQuarters className="mr-2 text-yellow-500"/>
+                                        <span>UV-Index</span>
+                                    </div>
+                                    <span>{uvindex}/10</span>
+                                </div>
+                            </div>
+
+                            <div className="pl-5 w-full">
+                                <div
+                                    className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
+                                    <div>
+                                        <FaTint className="mr-2 text-blue-500"/>
+                                        <span>Humidty</span>
+                                    </div>
+                                    <span>{humidty}</span>
+                                </div>
+                                <div
+                                    className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
+                                    <div>
+                                        <FaCloudSun className="mr-2 text-red-500"/>
+                                        <span>Pressure</span>
+                                    </div>
+                                    <span>{pressure}</span>
+                                </div>
+                                <div
+                                    className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
+                                    <div>
+                                        <FaEye className="mr-2 text-green-500"/>
+                                        <span>Visibility</span>
+                                    </div>
+                                    <span>{visibility}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div className="pt-4 flex justify-between">
-                        <div className="w-full">
-                            <div className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaWind className="mr-2 text-blue-500"/>
-                                    <span>Wind</span>
+                </div>
+                <div className="w-[50%] pl-4 flex flex-col">
+                    <div className="text-[160px] w-full flex justify-center">
+                        {getWeatherIcon(weatherData.current.weather[0].icon)}
+                    </div>
+                    <div className="w-full flex mt-auto">
+                        {forecastIntervals.map((interval: any, index: any) => (
+                            <div key={index} className="text-center w-full flex flex-col items-center">
+                                <span className="mb-2">{interval.time}</span>
+                                <div className="mb-2 text-5xl">
+                                    {getWeatherIcon(interval.icon)}
                                 </div>
-                                <span>{windspeed}</span>
+                                <span>{interval.temperature}</span>
+                                <span>{interval.weather}</span>
                             </div>
-                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaTint className="mr-2 text-blue-500"/>
-                                    <span>Dew Point</span>
-                                </div>
-                                <span>{dewpoint}</span>
-                            </div>
-                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaThermometerThreeQuarters className="mr-2 text-yellow-500"/>
-                                    <span>UV-Index</span>
-                                </div>
-                                <span>{uvindex}/10</span>
-                            </div>
-                        </div>
-
-                        <div className="pl-5 w-full">
-                            <div className="pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaTint className="mr-2 text-blue-500"/>
-                                    <span>Humidty</span>
-                                </div>
-                                <span>{humidty}</span>
-                            </div>
-                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaCloudSun className="mr-2 text-red-500"/>
-                                    <span>Pressure</span>
-                                </div>
-                                <span>{pressure}</span>
-                            </div>
-                            <div className="pt-3 pb-1 flex justify-between border-solid border-0 border-b border-b-background-primary">
-                                <div>
-                                    <FaEye className="mr-2 text-green-500"/>
-                                    <span>Visibility</span>
-                                </div>
-                                <span>{visibility}</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>
-            <div className="w-[50%] pl-4 flex flex-col">
-                <div className="text-[160px] w-full flex justify-center">
-                    {getWeatherIcon(weatherData.current.weather[0].icon)}
-                </div>
-                <div className="w-full flex mt-auto">
-                    {forecastIntervals.map((interval: any, index: any) => (
-                        <div key={index} className="text-center w-full flex flex-col items-center">
-                            <span className="mb-4">{interval.time}</span>
-                            <div className="mb-4 text-5xl">
-                                {getWeatherIcon(interval.icon)}
-                            </div>
-                            <span>{interval.temperature}</span>
-                            <span>{interval.weather}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
     );
 };
 

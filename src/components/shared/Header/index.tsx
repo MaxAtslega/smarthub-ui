@@ -20,7 +20,7 @@ const Header = () => {
     }, [])
 
     return (
-        <div className={"h-[38px] fixed top-0 left-0 w-full px-3 mb-1 pt-1"}>
+        <div className={"h-[38px] fixed top-0 left-0 w-full px-4 mb-1 pt-1"}>
             <div className={"flex justify-between items-center h-[100%]"}>
                 <span className={"flex font-bold text-xs content-center flex-wrap"}>{String(date.getHours()).padStart(2, "0")}:{String(date.getMinutes()).padStart(2, "0")}</span>
 

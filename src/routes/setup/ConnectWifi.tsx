@@ -34,7 +34,7 @@ const ConnectWifi = () => {
                 <label className="form-label" htmlFor="password">{t('connectWifi.passwordLabel', 'Password')}</label>
                 <input id="password"
                        ref={passwordInput}
-                       onChange={() => testPassword()}
+                       onChange={(e) => testPassword()}
                        className={"mb-4 w-full px-4 py-3 mt-2"}
                        type="text"
                        placeholder={t('connectWifi.passwordPlaceholder', 'Enter password')} />

@@ -2,7 +2,7 @@ import {webSocketService} from "@/services/webSocketService";
 import {useRebootMutation, useShutdownMutation} from "@/api/system.api";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {selectCurrentUser} from "@/slices/user.slice";
 import Constant from "@/models/Constant";
@@ -144,90 +144,90 @@ function General() {
 
         return null;
     };
-
     return (
-        <div>
-            <h1>General</h1>
-            <p>General settings for your device and profile.</p>
-            <div className={"mb-4"}>
-                <span className={"block pb-2"}>Controls</span>
-                <button className={"mb-4 mr-4"} onClick={async () => {
-                    await rebootSystem().unwrap();
-                }}>REBOOT
-                </button>
+        <div className={"bg-background-secondary h-full w-full rounded overflow-auto p-2"}>
+            <div>
+                <h1>General</h1>
+                <p>General settings for your device and profile.</p>
+                <div className={"mb-4"}>
+                    <span className={"block pb-2"}>Controls</span>
+                    <button className={"mb-4 mr-4"} onClick={async () => {
+                        await rebootSystem().unwrap();
+                    }}>REBOOT
+                    </button>
 
-                <button className={"mb-4 mr-4"} onClick={async () => {
-                    await shutdownSystem().unwrap();
-                }}>SHUTDOWN
-                </button>
+                    <button className={"mb-4 mr-4"} onClick={async () => {
+                        await shutdownSystem().unwrap();
+                    }}>SHUTDOWN
+                    </button>
+                </div>
+
+                <div className="language-setup mb-4">
+                    <label className={"block mb-2"} htmlFor="language">Language</label>
+                    <select defaultValue={currentUser.language} className={"w-full px-2 py-3 bg-background-third"}
+                            id="language"
+                            onChange={handleChangeLanguage}>
+                        <option value="de">German (Standard)</option>
+                        <option value="de-CH">German (Switzerland)</option>
+                        <option value="de-AT">German (Austria)</option>
+                        <option value="de-LI">German (Liechtenstein)</option>
+                        <option value="de-LU">German (Luxembourg)</option>
+                        <option value="en-US">English (United States)</option>
+                        <option value="en-GB">English (United Kingdom)</option>
+                        <option value="en-AU">English (Australia)</option>
+                        <option value="es">Spanish (Spain)</option>
+                        <option value="es-MX">Spanish (Mexico)</option>
+                    </select>
+                </div>
+
+                <div className="keyboard-setup pb-8">
+                    <label className={"block mb-2"} htmlFor="language">Keyboard layout</label>
+                    <select defaultValue={currentUser.keyboard} className={"w-full px-2 py-3 bg-background-third"}
+                            onChange={handleChangeKeyboard} id="language">
+                        {Object.keys(keyboardLayouts).map((key: string) => (
+                            <option key={key} value={key}>
+                                {(keyboardLayouts as { [index: string]: any })[key]}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <span>{t('location.title', 'Location')}</span>
+                {
+                    error != null && (
+                        <div className={"bg-special-red p-2"}>{t('location.error.' + error)}</div>
+                    )
+                }
+
+                <div className={"mt-4"}>
+                    <label className="block mb-2" htmlFor="city">
+                        {t('setup.cityLabel', 'Your city:')}
+                    </label>
+                    <input
+                        id="city"
+                        ref={cityInput}
+                        className="px-2 py-3 bg-background-third"
+                        placeholder={t('location.cityPlaceholder', 'Your city')}
+                    />
+                </div>
+
+                <div className={"mt-4"}>
+                    <label className="block mb-2" htmlFor="country">
+                        {t('setup.countryLabel', 'Your country:')}
+                    </label>
+                    <input
+                        id="country"
+                        ref={countryInput}
+                        className="px-2 py-3 bg-background-third"
+                        placeholder={t('location.countryPlaceholder', 'Your country')}
+                    />
+                </div>
+
+                <div className={"mt-4 pb-4"}>
+                    <button disabled={loading} onClick={() => validateInput()}
+                            className={""}>{t('button.save', "Save")}</button>
+                </div>
             </div>
-
-            <div className="language-setup mb-4">
-                <label className={"block mb-2"} htmlFor="language">Language</label>
-                <select defaultValue={currentUser.language} className={"w-full px-2 py-3 bg-background-third"} id="language"
-                        onChange={handleChangeLanguage}>
-                    <option value="de">German (Standard)</option>
-                    <option value="de-CH">German (Switzerland)</option>
-                    <option value="de-AT">German (Austria)</option>
-                    <option value="de-LI">German (Liechtenstein)</option>
-                    <option value="de-LU">German (Luxembourg)</option>
-                    <option value="en-US">English (United States)</option>
-                    <option value="en-GB">English (United Kingdom)</option>
-                    <option value="en-AU">English (Australia)</option>
-                    <option value="es">Spanish (Spain)</option>
-                    <option value="es-MX">Spanish (Mexico)</option>
-                </select>
-            </div>
-
-            <div className="keyboard-setup pb-8">
-                <label className={"block mb-2"} htmlFor="language">Keyboard layout</label>
-                <select defaultValue={currentUser.keyboard} className={"w-full px-2 py-3 bg-background-third"}
-                        onChange={handleChangeKeyboard} id="language">
-                    {Object.keys(keyboardLayouts).map((key: string) => (
-                        <option key={key} value={key}>
-                            {(keyboardLayouts as { [index: string]: any })[key]}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <span>{t('location.title', 'Location')}</span>
-            {
-                error != null && (
-                    <div className={"bg-special-red p-2"}>{t('location.error.' + error)}</div>
-                )
-            }
-
-            <div className={"mt-4"}>
-                <label className="block mb-2" htmlFor="city">
-                    {t('setup.cityLabel', 'Your city:')}
-                </label>
-                <input
-                    id="city"
-                    ref={cityInput}
-                    className="px-2 py-3 bg-background-third"
-                    placeholder={t('location.cityPlaceholder', 'Your city')}
-                />
-            </div>
-
-            <div className={"mt-4"}>
-                <label className="block mb-2" htmlFor="country">
-                    {t('setup.countryLabel', 'Your country:')}
-                </label>
-                <input
-                    id="country"
-                    ref={countryInput}
-                    className="px-2 py-3 bg-background-third"
-                    placeholder={t('location.countryPlaceholder', 'Your country')}
-                />
-            </div>
-
-            <div className={"mt-4 pb-4"}>
-                <button disabled={loading} onClick={() => validateInput()}
-                        className={""}>{t('button.save', "Save")}</button>
-            </div>
-
-
         </div>
     )
 }

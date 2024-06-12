@@ -7,7 +7,6 @@ import Weather from "@/routes/weather/Weather";
 import Notifications from "@/routes/notifications/Notifications";
 import Setup from "@/routes/setup/Setup";
 import DefaultLayout from "@/components/layouts/Default";
-import DeviceControl from "@/routes/deviceControl/DeviceControl";
 import React from "react";
 import General from "@/routes/settings/General";
 import Bluetooth from "@/routes/settings/Bluetooth";
@@ -23,17 +22,20 @@ import ConnectWifi from "@/routes/setup/ConnectWifi";
 import Location from "@/routes/setup/Location";
 import NetworkSettings from "@/routes/settings/Network"
 import Customize from "@/routes/settings/Customize";
-import Clock from "@/routes/clock/Clock";
-import Timer from "@/routes/clock/Timer";
-import Alarm from "@/routes/clock/Alarm";
-import AddAlarm from "@/routes/clock/AddAlarm";
+import Clock from "@/routes/clock/routes/Clock";
+import Timer from "@/routes/clock/routes/Timer";
+import Alarm from "@/routes/clock/routes/Alarm";
+import AddAlarm from "@/routes/clock/routes/AddAlarm";
 import BoxLayout, {NavigationBoxItems} from "@/components/layouts/BoxLayout";
-import {FaCogs} from "react-icons/fa";
+import {FaCogs, FaSpotify} from "react-icons/fa";
 import {BsWifi} from "react-icons/bs";
 import {IoMdBluetooth} from "react-icons/io";
 import {RiRfidFill} from "react-icons/ri";
 import {BiSolidCustomize} from "react-icons/bi";
 import {LuUsers} from "react-icons/lu";
+import Spotify from "@/routes/music/Spotify";
+import {FaRadio} from "react-icons/fa6";
+import MusicPlayer from "@/components/music/MusicPlayer";
 
 const settingsUrls: NavigationBoxItems[] = [
     {
@@ -61,6 +63,19 @@ const settingsUrls: NavigationBoxItems[] = [
         icon: <LuUsers/>
     }
 ]
+
+const musicBoxes: NavigationBoxItems[]  = [
+    {
+        to: "/app/music/radio",
+        icon: <FaRadio />
+    },
+    {
+        to: "/app/music/spotify",
+        icon: <FaSpotify />,
+        color: "special-spotify"
+    },
+]
+
 
 export default createBrowserRouter([
     {
@@ -116,11 +131,21 @@ export default createBrowserRouter([
             },
             {
                 path: "app/music",
-                element: <Radio/>,
-            },
-            {
-                path: "app/device-control",
-                element: <DeviceControl/>,
+                element: <BoxLayout boxes={musicBoxes}/>,
+                children: [
+                    {
+                        path: "radio",
+                        element: <Radio/>,
+                    },
+                    {
+                        path: "spotify",
+                        element: <Spotify />,
+                    },
+                    {
+                        path: "",
+                        loader: () => redirect("/app/music/radio"),
+                    },
+                ]
             },
             {
                 path: "app/weather",

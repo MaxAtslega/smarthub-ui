@@ -27,6 +27,7 @@ export default {
           red: "rgba(254, 76, 108, 1)",
           green: "rgb(39,255,8)",
           redColor: "rgb(30,30,30)",
+          spotify: "#1DB954",
         },
         primary: {
           100: '#0746eb',

@@ -22,7 +22,7 @@ const NumberSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue,
             const column = i + 1;
             const number = getNumber(column, 'active');
             if(number && number.innerText != digit){
-                getNumber(column, digit)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                getNumber(column, digit)?.scrollIntoView({ behavior: 'instant', block: 'center' });
             }
         });
     }, [timer]);
@@ -51,7 +51,9 @@ const NumberSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue,
 
                         if (target.classList.contains('last-zero')) {
                             if (swiperElement) {
-                                swiperElement.querySelector(`#center-${column}`)?.scrollIntoView();
+                                swiperElement.querySelector(`#center-${column}`)?.scrollIntoView({
+                                    behavior: 'instant', block: 'center'
+                                });
                             }
                         }
 
@@ -120,7 +122,7 @@ const NumberSwiper: React.FC<NumberSwiperProps> = ({ timer, elementId, setValue,
         if (newElement) {
             setTimeout(() => {
                 if (newElement) {
-                    newElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    newElement.scrollIntoView({ behavior: 'instant', block: 'center' });
                 }
             }, 1000);
         }

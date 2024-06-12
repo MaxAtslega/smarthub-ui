@@ -1,12 +1,27 @@
-function Dashboard() {
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+
+const Dashboard: React.FC = () => {
+    const currentUser = useSelector((state: RootState) => state.user.currentUser);
+    const userName = currentUser?.username || 'User';
+
+    const getGreeting = () => {
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) {
+            return 'Good morning';
+        } else if (currentHour < 18) {
+            return 'Good afternoon';
+        } else {
+            return 'Good evening';
+        }
+    };
+
     return (
         <div>
-                <h1>Dashboard</h1>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/j0VvINK2khY?si=hlmtOfVUKC3svcZa"
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            <h1>{`${getGreeting()}, ${userName}`}</h1>
         </div>
-    )
-}
+    );
+};
 
-export default Dashboard
+export default Dashboard;
