@@ -1,0 +1,43 @@
+{
+  "setup": {
+    "title": "Willkommen, {{username}}!",
+    "message": "Herzlichen Glückwunsch zur Erstellung Ihres Profils und zur Anmeldung! Um die beste Erfahrung zu gewährleisten, nehmen Sie sich bitte einen Moment Zeit, um die folgenden Einstellungen abzuschließen:",
+    "error": "An error has occurred while setting the language",
+    "selectLanguage": "Select your language:",
+    "selectKeyboard": "Select your keyboard layout:"
+  },
+  "location": {
+    "title": "Ort",
+    "info": "Wir verwenden diese Informationen, um Ihnen genaue Wetterdaten zu liefern.",
+    "cityLabel": "Geben Sie Ihre Stadt ein:",
+    "cityPlaceholder": "Ihre Stadt",
+    "countryLabel": "Geben Sie Ihr Land ein:",
+    "countryPlaceholder": "Ihr Land",
+    "error": {
+      "input": "Bitte geben Sie sowohl Stadt als auch Land ein.",
+      "fetch": "Fehler beim Abrufen der Wetterdaten.",
+      "user": "Benutzerinformationen fehlen.",
+      "post": "Fehler beim Festlegen oder Aktualisieren der Standortdaten."
+    },
+    "loading": "Wetterdaten werden geladen...",
+    "weatherData": "Wetterdaten"
+  },
+  "network": {
+    "title": "Netzwerk",
+    "ethernetConnected": "Sie sind über Ethernet verbunden. Sie können fortfahren...",
+    "wlanOff": "Aus",
+    "wlanEnable": "Aktivieren",
+    "wlanOn": "An",
+    "wlanDisable": "Deaktivieren",
+    "currentNetwork": "Aktuelles Netzwerk",
+    "connected": "Verbunden",
+    "disconnect": "Trennen",
+    "availableNetworks": "Verfügbare Netzwerke",
+    "scanning": "Suche nach Netzwerken..."
+  },
+  "button": {
+    "exit": "Verlassen",
+    "next": "Weiter",
+    "back": "Zurück"
+  }
+}

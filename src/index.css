@@ -1,42 +1,81 @@
 @tailwind base;
+
 @tailwind components;
+
 @tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color-scheme: dark;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  width: 800px;
+  min-height: 480px;
+  max-height: 480px;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+
+  -moz-user-select: none;
+  user-select: none;
+}
+
+#root {
+  padding: 0;
+  margin: 0;
+  background-color: #000000;
+  width: 800px;
+  min-height: 480px;
+  max-height: 480px;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #ffffff;
   text-decoration: inherit;
 }
-a:hover {
-  color: #535bf2;
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+
+  width: 800px;
+  min-height: 480px;
+  max-height: 480px;
 }
 
 h1 {
-  font-size: 3.2em;
+  margin: 0;
+  font-size: 2em;
+  line-height: 1.1;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.5em;
   line-height: 1.1;
 }
 
@@ -59,36 +98,75 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-code {
-  background-color: #1a1a1a;
-  padding: 2px 4px;
-  margin: 0 4px;
-  border-radius: 4px;
+.no-pointer-events {
+  pointer-events: none;
 }
 
-.card {
-  padding: 2em;
+input {
+  width: 100%;
+  padding: 8px;
+  background: #111315;
+  border: none;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+input:hover {
+  border: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-  code {
-    background-color: #f9f9f9;
-  }
+input:focus {
+  border: none;
+  outline: none;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+button:focus {
+  border: none;
+  outline: none;
+}
+
+select {
+  background: #111315;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+
+  border: none;
+  outline: none;
+}
+
+select:focus {
+  border: none;
+  outline: none;
+}
+
+
+.number-swiper:active .number-swiper-column, .number-swiper:hover .number-swiper-column, .number-swiper:focus-within .number-swiper-column {
+  box-shadow: 0 0 .1em .1em rgba(0, 0, 0, 0.5) inset;
+  transition: 1s;
+}
+
+.number-swiper-active-number {
+  color: #ffffff;
+}
+
+.number-swiper-column::-webkit-scrollbar { display:none }
+
+.number-swiper-column{
+  overflow: scroll;
+  scrollbar-width: none;
+  height: 2.2em;
+  list-style: none;
+  padding: 0;
+  margin: auto 0;
+  scroll-snap-type: y mandatory;
+  color: #444444;
+}
+
+.number-swiper-column li{
+  scroll-snap-align: center;
+  height: 1em;
+  margin: .25em .03em .3em .1em;
 }

@@ -1,0 +1,10 @@
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #000000;
+    border-radius: 100px;
+}
+
+
+
+input[type=range]:focus {
+    outline: none;
+}
