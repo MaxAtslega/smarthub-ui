@@ -24,6 +24,8 @@ interface SpotifyContextProps {
     isAuthenticated: boolean;
     currentTrack: any;
     play: () => void;
+    next: () => void;
+    previous: () => void;
     pause: () => void;
     fetchCurrentTrack: () => void;
     authenticateUser: (code: string) => void;
@@ -111,6 +113,24 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children }) =>
     const play = async () => {
         try {
             await spotifyApi.play();
+            fetchCurrentTrack();
+        } catch (error) {
+            console.error('Failed to play', error);
+        }
+    };
+
+    const next = async () => {
+        try {
+            await spotifyApi.skipToNext();
+            fetchCurrentTrack();
+        } catch (error) {
+            console.error('Failed to play', error);
+        }
+    };
+
+    const previous = async () => {
+        try {
+            await spotifyApi.skipToPrevious();
             fetchCurrentTrack();
         } catch (error) {
             console.error('Failed to play', error);
@@ -224,7 +244,7 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children }) =>
     }, [player]);
 
     return (
-        <SpotifyContext.Provider value={{ isAuthenticated, currentTrack, play, pause, fetchCurrentTrack, authenticateUser, refreshAccessToken, logout, player, isPlaying }}>
+        <SpotifyContext.Provider value={{ isAuthenticated, currentTrack, play, next, previous, pause, fetchCurrentTrack, authenticateUser, refreshAccessToken, logout, player, isPlaying }}>
             {children}
         </SpotifyContext.Provider>
     );

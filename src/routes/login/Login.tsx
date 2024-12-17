@@ -38,7 +38,7 @@ const Login = () => {
 
 
   return (
-    <div className={"flex flex-col relative h-[480px]"}>
+    <div className={"flex flex-col relative h-[480px] bg-login-screen bg-cover"}>
       <div className={"h-[38px] w-full px-3 mb-1 pt-1"}>
         <div className={"flex justify-between items-center h-[100%]"}>
           <span

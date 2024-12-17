@@ -59,11 +59,11 @@ const Radio: React.FC = () => {
                     name === searchedName && name !== "" ? <button type="submit" onClick={() => {
                             setSearchedName("")
                             setName("")
-                        }} className="bg-blue-500 text-white p-2 rounded">Clear</button> :
+                        }} className="bg-primary-100 text-white p-2 rounded">Clear</button> :
                         <button type="submit" onClick={() => {
                             if(name.trim() != "") {
                                 setSearchedName(name)
-                            }}} disabled={name.trim() == ""} className="bg-blue-500 text-white p-2 rounded">Search
+                            }}} disabled={name.trim() == ""} className="bg-primary-100 text-white p-2 rounded">Search
                         </button>
                 }
             </div>

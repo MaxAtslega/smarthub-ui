@@ -37,22 +37,24 @@ export default function Default() {
     return (
         <SpotifyProvider>
             <AudioProvider>
-                <Header />
-                <main
-                    className={`fixed top-[46px] left-0 w-full ${
+                <div className={"bg-login-screen bg-cover h-[480px] w-[800px]"}>
+                    <Header />
+                    <main
+                      className={`fixed top-[46px] left-0 w-full ${
                         keyboardVisibility ? "h-[213px]" : "h-[360px]"
-                    }`}
-                >
-                    <div className={"h-full w-full overflow-x-hidden overflow-y-auto"}>
-                        <div className={"mx-3 h-full"}>
-                            <Outlet />
+                      }`}
+                    >
+                        <div className={"h-full w-full overflow-x-hidden overflow-y-auto"}>
+                            <div className={"mx-3 h-full"}>
+                                <Outlet />
+                            </div>
                         </div>
-                    </div>
 
-                    <Keyboard visibility={keyboardVisibility} setVisibility={setKeyboardVisibility}/>
+                        <Keyboard visibility={keyboardVisibility} setVisibility={setKeyboardVisibility}/>
 
-                    {!keyboardVisibility && <Navigator />}
-                </main>
+                        {!keyboardVisibility && <Navigator />}
+                    </main>
+                </div>
             </AudioProvider>
         </SpotifyProvider>
     );

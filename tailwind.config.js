@@ -12,6 +12,9 @@ export default {
       body: ['caption'],
     },
     extend: {
+      backgroundImage: {
+        'login-screen': "url('/images/login-screen.png')",
+      },
       dropShadow: {
         '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
         '4xl': '0 45px 65px rgba(0, 0, 0, 1)'
@@ -19,9 +22,9 @@ export default {
       },
       colors: {
         background: {
-          default: '#000000',
-          secondary: '#111315',
-          third: "#15181b",
+          default: '#00000044',
+          secondary: '#11131544',
+          third: "#15181b66",
         },
         special: {
           red: "rgba(254, 76, 108, 1)",
@@ -30,11 +33,11 @@ export default {
           spotify: "#1DB954",
         },
         primary: {
-          100: '#0746eb',
+          100: '#0746eb88',
           200: '#063fd4',
           300: '#0638bc',
           400: '#0531a5',
-          500: '#042a8d',
+          500: '#042a8d44',
           600: '#042376',
           700: '#031c5e',
           800: '#021546',

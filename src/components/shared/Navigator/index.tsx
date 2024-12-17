@@ -182,7 +182,7 @@ const WifiItem = () => {
         bgColor = "bg-primary-100";
     } else if (wlanInterface && wlanInterface.addr.length > 0) {
         icon = <IoWifiSharp />;
-        bgColor = "bg-blue-500";
+        bgColor = "bg-primary-100";
     }
 
     return (

@@ -47,7 +47,7 @@ const Spotify: React.FC = () => {
                                 placeholder="Enter 8-digit code"
                                 className="border mr-4 rounded px-4 bg-background-third p-4 mt-2"
                             />
-                            <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Submit</button>
+                            <button type="submit" className="bg-primary-100 text-white p-2 rounded w-full">Submit</button>
                         </form>
                     </div>
                 </div>

@@ -63,7 +63,7 @@ const Weather = () => {
 
     const stforecast = weatherData.current.weather[0].description;
     const temperaturelocation = `${Math.round(weatherData.current.temp - 273.15)}°C`;
-    const feelslike = `Fühlt sich an wie ${Math.round(weatherData.current.feels_like - 273.15)}°C`;
+    const feelslike = `Feels like ${Math.round(weatherData.current.feels_like - 273.15)}°C`;
     const sunriseTime = new Date(weatherData.current.sunrise * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     const sunsetTime = new Date(weatherData.current.sunset * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     const windspeed = `${weatherData.current.wind_speed} km/h`;
